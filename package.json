@@ -1,0 +1,22 @@
+{
+  "name": "yomu",
+  "version": "1.0.0",
+  "description": "Manga reader",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "cross-env NODE_ENV=production electron .",
+    "dev": "cross-env NODE_ENV=development electronmon ."
+  },
+  "author": "Vincent",
+  "license": "ISC",
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "electron": "^33.0.0",
+    "electronmon": "^2.0.3"
+  },
+  "dependencies": {
+    "electron-is-dev": "^3.0.1",
+    "path": "^0.12.7"
+  }
+}
