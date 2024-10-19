@@ -1,0 +1,14 @@
+/* use grid to separate columns and set background colors */
+
+#app {
+    display: grid;
+    grid-template-columns: 0.056fr 0.244fr 0.7fr;
+}
+
+#library {
+    background-color: #363636;
+}
+
+#details {
+    background-color: #212121;
+}
