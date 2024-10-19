@@ -8,12 +8,12 @@ import "./Nav.css";
 export const Nav = () => {
   return (
     // Nav section containing hamburger icon, home, and extension buttons
-    <div id="nav-section">
+    <section id="nav-section">
       <div id="nav-container">
         <RxHamburgerMenu className="nav-icons" />
         <RiHomeLine className="nav-icons" />
         <IoExtensionPuzzleOutline className="nav-icons" />
       </div>
-    </div>
+    </section>
   );
 };
