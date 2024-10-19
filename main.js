@@ -5,9 +5,10 @@ const path = require('path');
 let mainWindow;
 const createWindow = () => {
     mainWindow = new BrowserWindow({
-        width: 1400,
-        height: 800,
+        width: 1440,
+        height: 1024,
         resizable: false,
+        
         // Title bar styles to replace ugly default
         titleBarStyle: 'hidden',
         titleBarOverlay: {
