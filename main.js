@@ -58,16 +58,19 @@ app.on('activate', () => {
 const mangaDetails = [
     {
         name: "Naruto",
+        author: "Masashi Kishimoto",
         description: "Naruto is an orphan who has a dangerous fox-like entity",
         image: "https://d28hgpri8am2if.cloudfront.net/book_images/onix/cvr9781421582849/naruto-vol-72-9781421582849_hr.jpg"
     },
     {
         name: "Dragon Ball",
+        author: "Akira Toriyama",
         description: "Dragon Ball is a Japanese media franchise created by Akira Toriyama in 1984",
         image: "https://mangadex.org/covers/40bc649f-7b49-4645-859e-6cd94136e722/51c0756f-a053-46d0-a405-246a78541df2.jpg.512.jpg"
     },
     {
         name: "One Piece",
+        author: "Eiichiro Oda", 
         description: "Luffy is a young adventurer who has longed for a life of freedom ever since he can remember.",
         image: "https://m.media-amazon.com/images/I/81KuBRfJwxL._AC_UF1000,1000_QL80_.jpg"
     }

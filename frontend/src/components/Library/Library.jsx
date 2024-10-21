@@ -38,7 +38,7 @@ export const Library = () => {
             <MangaCard
               key={index}
               name={favourite.name}
-              description={favourite.description}
+              author={favourite.author}
               image={favourite.image}
             />
           ))}
