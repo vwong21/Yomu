@@ -1,3 +1,5 @@
+/* sets flex to card-container and text-container sets padding, gap, and w/h for cards */
+
 #manga-card {
     cursor: pointer;
 }
