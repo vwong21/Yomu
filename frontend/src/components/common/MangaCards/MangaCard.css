@@ -1,5 +1,4 @@
 #manga-card {
-    height: 10rem;
     cursor: pointer;
 }
 
@@ -8,7 +7,7 @@
     flex-direction: row;
 }
 
-.container-children {
+.card-container-children {
     padding: 1rem;
 }
 
@@ -20,9 +19,9 @@
 }
 
 img {
-    width: 90px;
-    height: 125px;
-    border-radius: 1.25rem;
+    width: 80px;
+    height: 135px;
+    border-radius: 0.5rem;
 }
 
 p {

@@ -12,6 +12,7 @@ export const Library = () => {
       </header>
       <div id="library-container">
         <MangaCard />
+        <MangaCard />
       </div>
     </section>
   );
