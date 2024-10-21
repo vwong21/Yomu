@@ -1,6 +1,7 @@
 import React from "react";
 import "../../Normalize.css";
 import "./Library.css";
+import { MangaCard } from "../common/MangaCards/MangaCard";
 
 export const Library = () => {
   return (
@@ -10,12 +11,7 @@ export const Library = () => {
         <h1>Yomu</h1>
       </header>
       <div id="library-container">
-        <div className="manga-card">Hello World</div>
-        <div className="manga-card">Hello World</div>
-        <div className="manga-card">Hello World</div>
-        <div className="manga-card">Hello World</div>
-        <div className="manga-card">Hello World</div>
-        <div className="manga-card">Hello World</div>
+        <MangaCard />
       </div>
     </section>
   );

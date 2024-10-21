@@ -1,0 +1,35 @@
+#manga-card {
+    height: 10rem;
+    cursor: pointer;
+}
+
+#card-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.container-children {
+    padding: 1rem;
+}
+
+#text-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 0.25rem;
+}
+
+img {
+    width: 90px;
+    height: 125px;
+    border-radius: 1.25rem;
+}
+
+p {
+    font-weight: 500;
+}
+
+#manga-description {
+    font-size: 0.75rem;
+    line-height: 1.5;
+}

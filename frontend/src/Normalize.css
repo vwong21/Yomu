@@ -9,8 +9,8 @@
  */
 
  @font-face {
-  font-family: itim;
-  src: url('../public/Itim-Regular.ttf');
+  font-family: monteserrat;
+  src: url('../public/Montserrat-VariableFont_wght.ttf');
  }
 
  html {
@@ -18,11 +18,15 @@
   -webkit-text-size-adjust: 100%; /* 2 */
   height: 100%;
   color: #ffffff;
-  font-family: itim;
+  font-family: monteserrat;
 }
 
 body, #root, .App, #app {
   height: 100%;
+}
+
+p {
+  margin: 0;
 }
 
 /* Sections

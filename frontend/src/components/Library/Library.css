@@ -9,7 +9,7 @@
 }
 
 header {
-    width: 80%;
+    width: 85%;
     height: 8.5%;
     display: flex;
     align-items: center;
@@ -24,19 +24,9 @@ h1 {
     font-size: 2.5rem;
 }
 
-hr {
-    margin: 0;
-    width: 80%;
-    border: 1px solid #4A4656;
-}
-
-/* Styles or library manga cards */
+/* Styles for library manga cards */
 #library-container {
     display: flex;
     flex-direction: column;
-}
-
-.manga-card {
-    height: 4rem;
-    width: 100%;
+    width: 85%;
 }
