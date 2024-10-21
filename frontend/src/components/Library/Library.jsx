@@ -9,8 +9,14 @@ export const Library = () => {
       <header id="title">
         <h1>Yomu</h1>
       </header>
-      <hr />
-      <div id="library-container"></div>
+      <div id="library-container">
+        <div className="manga-card">Hello World</div>
+        <div className="manga-card">Hello World</div>
+        <div className="manga-card">Hello World</div>
+        <div className="manga-card">Hello World</div>
+        <div className="manga-card">Hello World</div>
+        <div className="manga-card">Hello World</div>
+      </div>
     </section>
   );
 };

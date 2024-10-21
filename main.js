@@ -8,7 +8,6 @@ const createWindow = () => {
         width: 1440,
         height: 1024,
         resizable: false,
-        
         // Title bar styles to replace ugly default
         titleBarStyle: 'hidden',
         titleBarOverlay: {
