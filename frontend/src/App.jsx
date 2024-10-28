@@ -4,13 +4,13 @@ import "./Normalize.css";
 import { Home } from "./pages/Home/Home";
 
 function App() {
-  return (
-    <div className="App">
-      {/* Frame added for draggable area. Is transparent. Home is main part of app. */}
-      <Frame />
-      <Home />
-    </div>
-  );
+    return (
+        <div className="App">
+            {/* Frame added for draggable area. Is transparent. Home is main part of app. */}
+            <Frame />
+            <Home />
+        </div>
+    );
 }
 
 export default App;
