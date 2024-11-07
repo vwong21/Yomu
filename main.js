@@ -2,6 +2,7 @@
 import { app, BrowserWindow, ipcMain } from "electron";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
+import { downloadAndExtractFolder } from "./extensions/extensions.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -98,3 +99,22 @@ const getMangaDetails = async () => {
 
 // Sends manga details to renderer
 ipcMain.handle("get-manga-details", getMangaDetails);
+
+downloadAndExtractFolder("vwong21", "Yomu_Extensions", "MangaDex").catch(
+    console.error
+);
+
+// Receives extension name within the folderPath variable and calls downloadAndExtractFolder
+ipcMain.handle("download-extension", async (event, folderPath) => {
+    try {
+        const res = await downloadAndExtractFolder(
+            repoOwner,
+            repoName,
+            folderPath
+        );
+        return res;
+    } catch (error) {
+        console.error(error);
+        return "error";
+    }
+});
