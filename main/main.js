@@ -2,7 +2,7 @@
 import { app, BrowserWindow, ipcMain } from "electron";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
-import { downloadAndExtractFolder } from "./extensions/extensions.js";
+import { downloadAndExtractFolder } from "../backend/extensions/extensions.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -35,7 +35,7 @@ const createWindow = () => {
         process.env.NODE_ENV === "development"
             ? "http://localhost:3000"
             : url.format({
-                  pathname: path.join(__dirname, "./frontend/build/index.html"),
+                  pathname: path.join(__dirname, "../frontend/build/index.html"),
                   protocol: "file",
               });
 
@@ -100,9 +100,10 @@ const getMangaDetails = async () => {
 // Sends manga details to renderer
 ipcMain.handle("get-manga-details", getMangaDetails);
 
-downloadAndExtractFolder("vwong21", "Yomu_Extensions", "MangaDex").catch(
-    console.error
-);
+// To call function
+// downloadAndExtractFolder("vwong21", "Yomu_Extensions", "MangaDex").catch(
+//     console.error
+// );
 
 // Receives extension name within the folderPath variable and calls downloadAndExtractFolder
 ipcMain.handle("download-extension", async (event, folderPath) => {

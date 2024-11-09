@@ -28,7 +28,7 @@ export const downloadAndExtractFolder = async (
 
     // Create the zip file in the current dir
     const zip = new AdmZip(zipFilePath);
-    const extractedPath = path.resolve(`./extensions`);
+    const extractedPath = path.resolve(`./backend/extensions`);
 
     // Extract folder
     zip.getEntries().forEach((entry) => {
@@ -52,6 +52,10 @@ export const downloadAndExtractFolder = async (
     fs.unlinkSync(zipFilePath);
     return "success";
 };
+
+const addInJson = async (extension) => {
+    file = fs.readFile('extensions.json', 'utf-8')
+}
 
 // downloadAndExtractFolder("vwong21", "Yomu_Extensions", "MangaDex").catch(
 //     console.error
