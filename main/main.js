@@ -101,9 +101,9 @@ const getMangaDetails = async () => {
 ipcMain.handle("get-manga-details", getMangaDetails);
 
 // To call function
-// downloadAndExtractFolder("vwong21", "Yomu_Extensions", "MangaDex").catch(
-//     console.error
-// );
+downloadAndExtractFolder("vwong21", "Yomu_Extensions", "MangaDex").catch(
+    console.error
+);
 
 // Receives extension name within the folderPath variable and calls downloadAndExtractFolder
 ipcMain.handle("download-extension", async (event, folderPath) => {
