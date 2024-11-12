@@ -13,7 +13,7 @@ const logError = (context, error) => {
 export const downloadExtension = async (
     repoOwner,
     repoName,
-    folderPath,
+    extensionName,
     branch = "main"
 ) => {
     // Define url of repo and filepath of specific folder
@@ -40,13 +40,13 @@ export const downloadExtension = async (
     try {
         // Create the zip file in the current dir
         const zip = new AdmZip(zipFilePath);
-        const extractedPath = path.resolve(`${process.env.PATH_TO_EXTENSIONS}`);
+        const extractedPath = path.resolve(process.env.PATH_TO_EXTENSIONS);
 
         // Extract folder
         for (const entry of zip.getEntries()) {
             // Extract only the appropriate files
             if (
-                entry.entryName.startsWith(`${repoName}-${branch}/${folderPath}`) &&
+                entry.entryName.startsWith(`${repoName}-${branch}/${extensionName}`) &&
                 !entry.isDirectory
             ) {
                 const outputPath = path.join(
@@ -59,10 +59,10 @@ export const downloadExtension = async (
                 await fs.writeFile(outputPath, entry.getData());
             }
         }
-        console.log(`Folder "${folderPath}" extracted successfully.`);
+        console.log(`Folder "${extensionName}" extracted successfully.`);
 
         // Call function to change installed status to true
-        await changeInstallJson(folderPath, true)
+        await changeInstallJson(extensionName, true)
     } catch(error) {
         logError('extracting and writing files', error)
         return;
@@ -79,10 +79,26 @@ export const downloadExtension = async (
     return "success";
 };
 
+// Function to delete function
+export const removeExtension = async (extensionName) => {
+    // Set folderpath using resolve to get absolute path
+    const folderPath = path.resolve(process.env.PATH_TO_EXTENSIONS, extensionName)
+    try {
+        // Delete extension setting recursive to true to delete all contents. Force is turned on to prevent crashes if any error
+        await fs.rm(folderPath, {recursive: true, force: true})
+
+        // Change installation status in json file
+        await changeInstallJson(extensionName, false)
+        console.log(`${extensionName} has been successfully deleted`)
+    } catch(error) {
+        logError('deleting extension', error)
+        return
+    }
+}
 
 
 // Function to change json installed status
-const changeInstallJson = async (extension, setTo) => {
+const changeInstallJson = async (extensionName, setTo) => {
     try {
         // Define the filepath for json file
         const filePath = `${process.env.PATH_TO_EXTENSIONS}/extensions.json`
@@ -93,7 +109,7 @@ const changeInstallJson = async (extension, setTo) => {
 
         // Check each object in the list and if the extension name is the same, mark it true
         for (const obj of jsonFile) {
-            if (obj.hasOwnProperty("name") && obj.name == extension) {
+            if (obj.hasOwnProperty("name") && obj.name == extensionName) {
                 if (setTo) {
                     obj.installed = true
                 } else {
@@ -110,6 +126,7 @@ const changeInstallJson = async (extension, setTo) => {
             logError('writing to json file', error)
         }
 }
+
 
 
 // downloadAndExtractFolder("vwong21", "Yomu_Extensions", "MangaDex").catch(
