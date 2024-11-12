@@ -10,6 +10,36 @@ const logError = (context, error) => {
     console.error(`Error in ${context}: `, error.message || error)
 }
 
+// Function to change json installed status
+const changeInstallJson = async (extensionName, setTo) => {
+    try {
+        // Define the filepath for json file
+        const filePath = `${process.env.PATH_TO_EXTENSIONS}/extensions.json`
+
+        // Read the file and parse it
+        const file = await fs.readFile(filePath, 'utf-8')
+        const jsonFile = JSON.parse(file)
+
+        // Check each object in the list and if the extension name is the same, mark it true
+        for (const obj of jsonFile) {
+            if (obj.hasOwnProperty("name") && obj.name == extensionName) {
+                if (setTo) {
+                    obj.installed = true
+                } else {
+                    obj.installed = false
+                }
+            }
+        }
+
+        // Convert new data to string and write it to json file
+        const stringFile = JSON.stringify(jsonFile)
+        await fs.writeFile(filePath, stringFile)    
+        } catch(error) {
+            logError('writing to json file', error)
+        }
+}
+
+
 export const downloadExtension = async (
     repoOwner,
     repoName,
@@ -76,7 +106,7 @@ export const downloadExtension = async (
         return;
     }
     
-    return "success";
+    return {status: "success", message: `${extensionName} has been installed.`};
 };
 
 // Function to delete function
@@ -90,45 +120,9 @@ export const removeExtension = async (extensionName) => {
         // Change installation status in json file
         await changeInstallJson(extensionName, false)
         console.log(`${extensionName} has been successfully deleted`)
+        return {status: "success", message: `${extensionName} has been removed.`}
     } catch(error) {
         logError('deleting extension', error)
         return
     }
 }
-
-
-// Function to change json installed status
-const changeInstallJson = async (extensionName, setTo) => {
-    try {
-        // Define the filepath for json file
-        const filePath = `${process.env.PATH_TO_EXTENSIONS}/extensions.json`
-
-        // Read the file and parse it
-        const file = await fs.readFile(filePath, 'utf-8')
-        const jsonFile = JSON.parse(file)
-
-        // Check each object in the list and if the extension name is the same, mark it true
-        for (const obj of jsonFile) {
-            if (obj.hasOwnProperty("name") && obj.name == extensionName) {
-                if (setTo) {
-                    obj.installed = true
-                } else {
-                    obj.installed = false
-                }
-                
-            }
-        }
-
-        // Convert new data to string and write it to json file
-        const stringFile = JSON.stringify(jsonFile)
-        await fs.writeFile(filePath, stringFile)    
-        } catch(error) {
-            logError('writing to json file', error)
-        }
-}
-
-
-
-// downloadAndExtractFolder("vwong21", "Yomu_Extensions", "MangaDex").catch(
-//     console.error
-// );

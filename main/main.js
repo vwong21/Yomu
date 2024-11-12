@@ -123,6 +123,16 @@ ipcMain.handle("download-extension", async (event, repoOwner, repoName, extensio
         return res;
     } catch (error) {
         console.error(error);
-        return "error";
+        return error;
     }
 });
+
+ipcMain.handle("remove-extension", async (event, extensionName) => {
+    try {
+        const res = await removeExtension(extensionName)
+        return res
+    } catch(error) {
+        console.error(error);
+        return error;
+    }
+})
