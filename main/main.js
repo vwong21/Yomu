@@ -55,7 +55,10 @@ const createWindow = () => {
 };
 
 // Event listener for when the app is ready
-app.on("ready", createWindow);
+app.on("ready", () => {
+    createWindow();
+    checkSettings();
+});
 
 // For Mac since MacOS apps keep running while all windows closed
 app.on("window-all-closed", () => {
