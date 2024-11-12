@@ -4,7 +4,12 @@ const { contextBridge, ipcRenderer } = require("electron");
 contextBridge.exposeInMainWorld("api", {
     getFavourites: () => ipcRenderer.invoke("get-manga-details"),
     DownloadExtension: (repoOwner, repoName, extensionName) =>
-        ipcRenderer.invoke("download-extension", repoOwner, repoName, extensionName),
-    RemoveExtension: (extensionName) => 
+        ipcRenderer.invoke(
+            "download-extension",
+            repoOwner,
+            repoName,
+            extensionName
+        ),
+    RemoveExtension: (extensionName) =>
         ipcRenderer.invoke("remove-extension", extensionName),
 });

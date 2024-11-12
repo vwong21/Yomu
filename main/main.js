@@ -2,10 +2,14 @@
 import { app, BrowserWindow, ipcMain } from "electron";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
-import { checkSettings,downloadExtension, removeExtension } from "../backend/extensions/extensions.js";
-import dotenv from 'dotenv';
+import {
+    checkSettings,
+    downloadExtension,
+    removeExtension,
+} from "../backend/extensions/extensions.js";
+import dotenv from "dotenv";
 
-dotenv.config()
+dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -109,31 +113,32 @@ ipcMain.handle("get-manga-details", getMangaDetails);
 //     console.error(error);
 //     });
 
-
 // removeExtension('MangaDex')
 
-
 // Receives extension name within the folderPath variable and calls downloadAndExtractFolder
-ipcMain.handle("download-extension", async (event, repoOwner, repoName, extensionName) => {
+ipcMain.handle(
+    "download-extension",
+    async (event, repoOwner, repoName, extensionName) => {
+        try {
+            const res = await downloadExtension(
+                repoOwner,
+                repoName,
+                extensionName
+            );
+            return res;
+        } catch (error) {
+            console.error(error);
+            return error;
+        }
+    }
+);
+
+ipcMain.handle("remove-extension", async (event, extensionName) => {
     try {
-        const res = await downloadExtension(
-            repoOwner,
-            repoName,
-            extensionName
-        );
+        const res = await removeExtension(extensionName);
         return res;
     } catch (error) {
         console.error(error);
         return error;
     }
 });
-
-ipcMain.handle("remove-extension", async (event, extensionName) => {
-    try {
-        const res = await removeExtension(extensionName)
-        return res
-    } catch(error) {
-        console.error(error);
-        return error;
-    }
-})
