@@ -6,6 +6,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+// Error logger function
 const logError = (context, error) => {
     console.error(`Error in ${context}: `, error.message || error)
 }
@@ -39,7 +40,7 @@ const changeInstallJson = async (extensionName, setTo) => {
         }
 }
 
-
+// Function to download extension
 export const downloadExtension = async (
     repoOwner,
     repoName,
