@@ -8,15 +8,15 @@ dotenv.config();
 
 // Error logger function
 const logError = (context, error) => {
-    console.error(`Error in ${context}: `, error.message || error)
+    const message = `Error in ${context}: ${error.message || error}`
+    throw {status: "error", message: message}
 }
 
 // Function to change json installed status
 const changeInstallJson = async (extensionName, setTo) => {
     try {
         // Define the filepath for json file
-        const filePath = `${process.env.PATH_TO_EXTENSIONS}/extensions.json`
-
+        const filePath = path.resolve(process.env.PATH_TO_EXTENSIONS, 'extensions.json')
         // Read the file and parse it
         const file = await fs.readFile(filePath, 'utf-8')
         const jsonFile = JSON.parse(file)
@@ -36,9 +36,57 @@ const changeInstallJson = async (extensionName, setTo) => {
         const stringFile = JSON.stringify(jsonFile)
         await fs.writeFile(filePath, stringFile)    
         } catch(error) {
-            logError('writing to json file', error)
+            return logError('writing to json file', error)
         }
 }
+
+// Function to check if installed extensions match json
+export const checkSettings = async () => {
+    // Absolute path to extensions folder and json file
+    const extensionsFolderPath = path.resolve(process.env.PATH_TO_EXTENSIONS)
+    const extensionsJsonPath = path.resolve(process.env.PATH_TO_EXTENSIONS, 'extensions.json')
+
+    let folders;
+    try {
+        // Get directory entries
+        const dirents = await fs.readdir(extensionsFolderPath, {withFileTypes: true})
+
+        // Map out only directories to folders variable
+        folders = dirents.filter(dirent => dirent.isDirectory()).map(dirent => dirent.name)
+    } catch(error) {
+        return logError('locating extensions folder', error)
+    }
+
+
+    // Get contents of json file
+    let jsonFile;
+
+    try {
+        const file = await fs.readFile(extensionsJsonPath, 'utf-8')
+        jsonFile = JSON.parse(file)
+    } catch(error) {
+        return logError('getting json file contents', error)
+    }
+    
+    // Compare lists
+    folders.forEach(extensionName => {
+        const extensionObj = jsonFile.find(ext => ext.name === extensionName)
+        if (extensionObj && !extensionObj.installed) {
+            extensionObj.installed = true
+        }
+    })
+
+    // Write to file
+    try {
+        const newJson = JSON.stringify(jsonFile)
+        await fs.writeFile(extensionsJsonPath, newJson) 
+    } catch(error) {
+        return logError('writing to new file', error)
+    }
+    
+    return {status: "success", message: "Extensions synced."}
+}
+
 
 // Function to download extension
 export const downloadExtension = async (
@@ -64,8 +112,7 @@ export const downloadExtension = async (
         await fs.writeFile(zipFilePath, buffer);
 
     } catch(error) {
-        logError('fetching data from zip url', error)
-        return;
+        return logError('fetching data from zip url', error)
     }
 
     try {
@@ -95,16 +142,14 @@ export const downloadExtension = async (
         // Call function to change installed status to true
         await changeInstallJson(extensionName, true)
     } catch(error) {
-        logError('extracting and writing files', error)
-        return;
+        return logError('extracting and writing files', error)
     }
 
     try {
         // Clean up
         await fs.unlink(zipFilePath); 
     } catch(error) {
-        logError('cleaning up', error)
-        return;
+        return logError('cleaning up', error)
     }
     
     return {status: "success", message: `${extensionName} has been installed.`};
@@ -123,7 +168,6 @@ export const removeExtension = async (extensionName) => {
         console.log(`${extensionName} has been successfully deleted`)
         return {status: "success", message: `${extensionName} has been removed.`}
     } catch(error) {
-        logError('deleting extension', error)
-        return
+        return logError('deleting extension', error)
     }
 }
