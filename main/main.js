@@ -3,6 +3,9 @@ import { app, BrowserWindow, ipcMain } from "electron";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 import { downloadAndExtractFolder } from "../backend/extensions/extensions.js";
+import dotenv from 'dotenv';
+
+dotenv.config()
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -35,7 +38,7 @@ const createWindow = () => {
         process.env.NODE_ENV === "development"
             ? "http://localhost:3000"
             : url.format({
-                  pathname: path.join(__dirname, "../frontend/build/index.html"),
+                  pathname: join(__dirname, process.env.PATH_TO_RENDERER),
                   protocol: "file",
               });
 
