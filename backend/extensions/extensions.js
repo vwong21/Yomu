@@ -10,7 +10,7 @@ const logError = (context, error) => {
     console.error(`Error in ${context}: `, error.message || error)
 }
 
-export const downloadAndExtractFolder = async (
+export const downloadExtension = async (
     repoOwner,
     repoName,
     folderPath,
@@ -60,7 +60,9 @@ export const downloadAndExtractFolder = async (
             }
         }
         console.log(`Folder "${folderPath}" extracted successfully.`);
-        await addInJson(folderPath)
+
+        // Call function to change installed status to true
+        await changeInstallJson(folderPath, true)
     } catch(error) {
         logError('extracting and writing files', error)
         return;
@@ -77,25 +79,37 @@ export const downloadAndExtractFolder = async (
     return "success";
 };
 
-// Function to change json contents to installed
-const addInJson = async (extension) => {
+
+
+// Function to change json installed status
+const changeInstallJson = async (extension, setTo) => {
     try {
+        // Define the filepath for json file
         const filePath = `${process.env.PATH_TO_EXTENSIONS}/extensions.json`
+
+        // Read the file and parse it
         const file = await fs.readFile(filePath, 'utf-8')
         const jsonFile = JSON.parse(file)
+
+        // Check each object in the list and if the extension name is the same, mark it true
         for (const obj of jsonFile) {
-            if (obj.hasOwnProperty("name") && obj.name == extension && obj.installed == false) {
-                obj.installed = true
+            if (obj.hasOwnProperty("name") && obj.name == extension) {
+                if (setTo) {
+                    obj.installed = true
+                } else {
+                    obj.installed = false
+                }
+                
             }
         }
+
+        // Convert new data to string and write it to json file
         const stringFile = JSON.stringify(jsonFile)
         await fs.writeFile(filePath, stringFile)    
         } catch(error) {
             logError('writing to json file', error)
         }
 }
-
-
 
 
 // downloadAndExtractFolder("vwong21", "Yomu_Extensions", "MangaDex").catch(

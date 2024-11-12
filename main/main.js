@@ -2,7 +2,7 @@
 import { app, BrowserWindow, ipcMain } from "electron";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
-import { downloadAndExtractFolder } from "../backend/extensions/extensions.js";
+import { downloadExtension } from "../backend/extensions/extensions.js";
 import dotenv from 'dotenv';
 
 dotenv.config()
@@ -104,14 +104,14 @@ const getMangaDetails = async () => {
 ipcMain.handle("get-manga-details", getMangaDetails);
 
 // To call function
-downloadAndExtractFolder("vwong21", "Yomu_Extensions", "MangaDex").catch(
-    console.error
-);
+// downloadExtension("vwong21", "Yomu_Extensions", "MangaDex").catch(
+//     console.error
+// );
 
 // Receives extension name within the folderPath variable and calls downloadAndExtractFolder
 ipcMain.handle("download-extension", async (event, folderPath) => {
     try {
-        const res = await downloadAndExtractFolder(
+        const res = await downloadExtension(
             repoOwner,
             repoName,
             folderPath
