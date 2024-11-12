@@ -1,8 +1,7 @@
 /* sets the frame at the top and invisible so it acts as a draggable region */
 #frame {
-    position: absolute;
-    height: 2rem;
-    width: 100%;
-    -webkit-app-region: drag;
+	position: absolute;
+	height: 2rem;
+	width: 100%;
+	-webkit-app-region: drag;
 }
-

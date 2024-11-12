@@ -1,36 +1,36 @@
 /* sets flex to card-container and text-container sets padding, gap, and w/h for cards */
 
 #manga-card {
-    cursor: pointer;
+	cursor: pointer;
 }
 
 #card-container {
-    display: flex;
-    flex-direction: row;
+	display: flex;
+	flex-direction: row;
 }
 
 .card-container-children {
-    padding: 1rem;
+	padding: 1rem;
 }
 
 #text-container {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-    margin-top: 0.25rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+	margin-top: 0.25rem;
 }
 
 img {
-    width: 80px;
-    height: 135px;
-    border-radius: 0.5rem;
+	width: 80px;
+	height: 135px;
+	border-radius: 0.5rem;
 }
 
 p {
-    font-weight: 500;
+	font-weight: 500;
 }
 
 #manga-author {
-    font-size: 0.75rem;
-    line-height: 1.5;
+	font-size: 0.75rem;
+	line-height: 1.5;
 }

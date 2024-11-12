@@ -1,32 +1,32 @@
 /* Style for title. Aligned with navbar */
 #library-component {
-    background-color: #363636;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 3rem;
-    width: 100%;
+	background-color: #363636;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 3rem;
+	width: 100%;
 }
 
 header {
-    width: 85%;
-    height: 8.5%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-bottom: 1px solid #4A4656;
+	width: 85%;
+	height: 8.5%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-bottom: 1px solid #4a4656;
 }
 
 h1 {
-    margin: 0;
-    margin-top: 0.65rem;
-    font-weight: 500;
-    font-size: 2rem;
+	margin: 0;
+	margin-top: 0.65rem;
+	font-weight: 500;
+	font-size: 2rem;
 }
 
 /* Styles for library manga cards */
 #library-container {
-    display: flex;
-    flex-direction: column;
-    width: 85%;
+	display: flex;
+	flex-direction: column;
+	width: 85%;
 }

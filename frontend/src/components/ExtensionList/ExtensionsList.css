@@ -1,8 +1,8 @@
 #extensions-component {
-    background-color: #363636;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 3rem;
-    width: 100%;
+	background-color: #363636;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 3rem;
+	width: 100%;
 }
