@@ -1,9 +1,1 @@
-[
-	{
-		"name": "MangaDex",
-		"url": "https://mangadex.org/",
-		"extensionDetails": ["vwong21", "Yomu_Extensions", "MangaDex"],
-		"description": "Uses MangaDex API",
-		"installed": true
-	}
-]
+[{"name":"MangaDex","url":"https://mangadex.org/","extensionDetails":["vwong21","Yomu_Extensions","MangaDex"],"description":"Uses MangaDex API","installed":true}]
