@@ -96,6 +96,48 @@ export const checkSettings = async () => {
 	return { status: 'success', message: 'Extensions synced.' };
 };
 
+// Function to return details on all available extensions to the renderer
+export const retrieveExtensions = async (installed) => {
+	// Get filepath of json file
+	const extensionsJsonPath = path.resolve(
+		process.env.PATH_TO_EXTENSIONS,
+		'extensions.json'
+	);
+	let jsonFile;
+	try {
+		// Read json file and convert it to json format
+		const file = await fs.readFile(extensionsJsonPath, 'utf-8');
+		jsonFile = JSON.parse(file);
+	} catch (error) {
+		return logError('reading json file', error);
+	}
+
+	// Loop through the json contents and push to new list. Doing this so that if project scales, it will be easy to manage what the renderer receives
+	const extensionsList = [];
+	for (const obj of jsonFile) {
+		let returnObj;
+
+		// If installed param is true, that means it is looking only for the installed extensions. Else, it is looking for all extensions
+		if (installed && obj.installed) {
+			returnObj = {
+				name: obj.name,
+				url: obj.url,
+				description: obj.description,
+			};
+		} else {
+			returnObj = {
+				name: obj.name,
+				url: obj.url,
+				description: obj.description,
+				installed: obj.installed,
+			};
+		}
+
+		extensionsList.push(returnObj);
+	}
+	return extensionsList;
+};
+
 // Function to download extension
 export const downloadExtension = async (
 	repoOwner,

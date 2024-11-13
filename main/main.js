@@ -4,6 +4,7 @@ import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import {
 	checkSettings,
+	retrieveExtensions,
 	downloadExtension,
 	removeExtension,
 } from '../backend/extensions/extensions.js';
@@ -117,6 +118,16 @@ ipcMain.handle('get-manga-details', getMangaDetails);
 //     });
 
 // removeExtension('MangaDex')
+
+ipcMain.handle('retrieve-extensions', async (event, installed) => {
+	try {
+		const res = await retrieveExtensions(installed);
+		return res;
+	} catch (error) {
+		console.log(error);
+		return error;
+	}
+});
 
 // Receives extension name within the folderPath variable and calls downloadAndExtractFolder
 ipcMain.handle(
