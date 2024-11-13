@@ -111,18 +111,17 @@ export const retrieveExtensions = async (installed) => {
 	} catch (error) {
 		return logError('reading json file', error);
 	}
-
 	// Loop through the json contents and push to new list. Doing this so that if project scales, it will be easy to manage what the renderer receives
 	const extensionsList = [];
 	for (const obj of jsonFile) {
 		let returnObj;
-
 		// If installed param is true, that means it is looking only for the installed extensions. Else, it is looking for all extensions
 		if (installed && obj.installed) {
 			returnObj = {
 				name: obj.name,
 				url: obj.url,
 				description: obj.description,
+				image: obj.image,
 			};
 		} else {
 			returnObj = {
@@ -130,9 +129,9 @@ export const retrieveExtensions = async (installed) => {
 				url: obj.url,
 				description: obj.description,
 				installed: obj.installed,
+				image: obj.image,
 			};
 		}
-
 		extensionsList.push(returnObj);
 	}
 	return extensionsList;

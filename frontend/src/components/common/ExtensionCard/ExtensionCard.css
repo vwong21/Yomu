@@ -1,0 +1,30 @@
+.extension-card {
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+	padding: 0.5rem;
+	box-sizing: border-box;
+}
+
+img {
+	padding: 0 1rem 0 1rem;
+}
+
+.extension-card-details {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+}
+
+.extension-title {
+	font-weight: 700;
+}
+
+.extension-details {
+	font-weight: 400;
+}
+
+.extension-action {
+	text-align: end;
+	margin-right: 1rem;
+}
