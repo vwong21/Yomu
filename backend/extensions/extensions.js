@@ -3,6 +3,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import AdmZip from 'adm-zip';
 import dotenv from 'dotenv';
+import { error } from 'console';
 
 dotenv.config();
 
@@ -78,13 +79,13 @@ export const checkSettings = async () => {
 	}
 
 	// Compare lists
-	folders.forEach((extensionName) => {
-		const extensionObj = jsonFile.find((ext) => ext.name === extensionName);
-		if (extensionObj && !extensionObj.installed) {
-			extensionObj.installed = true;
+	jsonFile.forEach((extension) => {
+		if (!folders.includes(extension.name)) {
+			extension.installed = false;
+		} else {
+			extension.installed = true;
 		}
 	});
-
 	// Write to file
 	try {
 		const newJson = JSON.stringify(jsonFile);
@@ -97,7 +98,7 @@ export const checkSettings = async () => {
 };
 
 // Function to return details on all available extensions to the renderer
-export const retrieveExtensions = async (installed) => {
+export const retrieveExtensions = async () => {
 	// Get filepath of json file
 	const extensionsJsonPath = path.resolve(
 		process.env.PATH_TO_EXTENSIONS,
@@ -114,39 +115,23 @@ export const retrieveExtensions = async (installed) => {
 	// Loop through the json contents and push to new list. Doing this so that if project scales, it will be easy to manage what the renderer receives
 	const extensionsList = [];
 	for (const obj of jsonFile) {
-		let returnObj;
-		// If installed param is true, that means it is looking only for the installed extensions. Else, it is looking for all extensions
-		if (installed && obj.installed) {
-			returnObj = {
-				name: obj.name,
-				url: obj.url,
-				description: obj.description,
-				image: obj.image,
-			};
-		} else {
-			returnObj = {
-				name: obj.name,
-				url: obj.url,
-				description: obj.description,
-				installed: obj.installed,
-				image: obj.image,
-			};
-		}
+		const returnObj = {
+			name: obj.name,
+			url: obj.url,
+			description: obj.description,
+			installed: obj.installed,
+			image: obj.image,
+		};
 		extensionsList.push(returnObj);
 	}
 	return extensionsList;
 };
 
 // Function to download extension
-export const downloadExtension = async (
-	repoOwner,
-	repoName,
-	extensionName,
-	branch = 'main'
-) => {
+export const downloadExtension = async (extensionName, branch = 'main') => {
 	// Define url of repo and filepath of specific folder
-	const zipUrl = `https://github.com/${repoOwner}/${repoName}/archive/refs/heads/${branch}.zip`;
-	const zipFilePath = path.resolve(`./${repoName}-${branch}.zip`);
+	const zipUrl = `https://github.com/${process.env.REPO_OWNER}/${process.env.REPO_NAME}/archive/refs/heads/main.zip`;
+	const zipFilePath = path.resolve(`./${process.env.REPO_NAME}-main.zip`);
 
 	try {
 		// Use node-fetch to fetch data from the zip url in a stream
@@ -168,40 +153,47 @@ export const downloadExtension = async (
 		const zip = new AdmZip(zipFilePath);
 		const extractedPath = path.resolve(process.env.PATH_TO_EXTENSIONS);
 
+		let foundMatch = false;
 		// Extract folder
 		for (const entry of zip.getEntries()) {
 			// Extract only the appropriate files
 			if (
 				entry.entryName.startsWith(
-					`${repoName}-${branch}/${extensionName}`
+					`${process.env.REPO_NAME}-main/${extensionName}`
 				) &&
 				!entry.isDirectory
 			) {
 				const outputPath = path.join(
 					extractedPath,
-					entry.entryName.replace(`${repoName}-${branch}/`, '')
+					entry.entryName.replace(
+						`${process.env.REPO_NAME}-main/`,
+						''
+					)
 				);
 
 				// Ensure the directory exists before writing the file
 				await fs.mkdir(path.dirname(outputPath), { recursive: true });
 				await fs.writeFile(outputPath, entry.getData());
+				foundMatch = true;
 			}
 		}
 		console.log(`Folder "${extensionName}" extracted successfully.`);
 
+		// If the folder doesn't exist, then throw an error
+		if (!foundMatch) {
+			return logError(
+				`extracting extension. Extension doesn't exist`,
+				error
+			);
+		}
 		// Call function to change installed status to true
 		await changeInstallJson(extensionName, true);
 	} catch (error) {
 		return logError('extracting and writing files', error);
-	}
-
-	try {
-		// Clean up
+	} finally {
+		// No matter the result, delete the zip file
 		await fs.unlink(zipFilePath);
-	} catch (error) {
-		return logError('cleaning up', error);
 	}
-
 	return {
 		status: 'success',
 		message: `${extensionName} has been installed.`,

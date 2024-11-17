@@ -7,7 +7,7 @@
 }
 
 img {
-	padding: 0 1rem 0 1rem;
+	padding: 0 1rem 0 0;
 }
 
 .extension-card-details {
@@ -18,13 +18,28 @@ img {
 
 .extension-title {
 	font-weight: 700;
+	cursor: pointer;
 }
 
 .extension-details {
-	font-weight: 400;
+	font-weight: 300;
+	opacity: 0.75;
+}
+
+.extension-action-container {
+	display: flex;
+	justify-content: flex-end;
 }
 
 .extension-action {
-	text-align: end;
-	margin-right: 1rem;
+	text-align: center;
+	cursor: pointer;
+	display: inline-block;
+	padding: 0.15rem 0.25rem 0.15rem 0.25rem;
+	border-radius: 3px;
+	font-size: small;
+}
+
+#install-button {
+	background-color: #4caf50;
 }

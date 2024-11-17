@@ -119,9 +119,9 @@ ipcMain.handle('get-manga-details', getMangaDetails);
 
 // removeExtension('MangaDex')
 
-ipcMain.handle('retrieve-extensions', async (event, installed) => {
+ipcMain.handle('retrieve-extensions', async () => {
 	try {
-		const res = await retrieveExtensions(installed);
+		const res = await retrieveExtensions();
 		return res;
 	} catch (error) {
 		console.log(error);
@@ -130,22 +130,15 @@ ipcMain.handle('retrieve-extensions', async (event, installed) => {
 });
 
 // Receives extension name within the folderPath variable and calls downloadAndExtractFolder
-ipcMain.handle(
-	'download-extension',
-	async (event, repoOwner, repoName, extensionName) => {
-		try {
-			const res = await downloadExtension(
-				repoOwner,
-				repoName,
-				extensionName
-			);
-			return res;
-		} catch (error) {
-			console.error(error);
-			return error;
-		}
+ipcMain.handle('download-extension', async (event, extensionName) => {
+	try {
+		const res = await downloadExtension(extensionName);
+		return res;
+	} catch (error) {
+		console.error(error);
+		return error;
 	}
-);
+});
 
 ipcMain.handle('remove-extension', async (event, extensionName) => {
 	try {

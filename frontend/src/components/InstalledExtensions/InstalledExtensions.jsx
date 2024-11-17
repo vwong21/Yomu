@@ -4,12 +4,13 @@ import './InstalledExtensions.css';
 import { ExtensionCard } from '../common/ExtensionCard/ExtensionCard';
 
 export const InstalledExtensions = () => {
+	const [filterExtensions, setFilterExtensions] = useState(false);
 	const [installedExtensions, setInstalledExtensions] = useState([]);
 	const [loading, setLoading] = useState(true);
 
 	const fetchExtensions = async () => {
 		try {
-			const res = await window.api.retrieveExtensions(true);
+			const res = await window.api.retrieveExtensions();
 			setInstalledExtensions(res);
 			setLoading(false);
 			console.log(res);
@@ -20,10 +21,6 @@ export const InstalledExtensions = () => {
 	useEffect(() => {
 		fetchExtensions();
 	}, []);
-
-	const logger = (logOut) => {
-		console.log(logOut);
-	};
 
 	return (
 		<div id='installed-extensions'>
