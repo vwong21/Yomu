@@ -1,22 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import '../../Normalize.css';
 import './ExtensionsList.css';
 import { ExtensionCard } from '../common/ExtensionCard/ExtensionCard';
 import Checkbox from 'react-custom-checkbox';
 
 export const ExtensionsList = () => {
-	// State to either show all the extensions or only the installed ones. False will show all extensions
-	const [filterInstalledExtensions, setFilterInstalledExtensions] =
-		useState(false);
-
-	// State that will be an array of all extensions. This array may be filtered depending on the filterExtensions state
+	// State that holds list of all extensions
 	const [allExtensions, setAllExtensions] = useState([]);
-
+	// State sets loading screen
 	const [loading, setLoading] = useState(true);
-
+	// State that holds list of installed extensions
 	const [installedExtensions, setInstalledExtensions] = useState([]);
 
 	const [isChecked, setIsChecked] = useState(false);
+
+	const [searchQuery, setSearchQuery] = useState(''); // Track search input
+	const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(''); // Debounced search input
 
 	const handleChecked = (checked) => {
 		setIsChecked(checked);
@@ -33,11 +32,25 @@ export const ExtensionsList = () => {
 		}
 	};
 
+	const handleSearchChange = (event) => {
+		setSearchQuery(event.target.value); // Update search query immediately
+	};
+
+	// Debouncing search query to optimize performance
+	useEffect(() => {
+		const timer = setTimeout(() => {
+			setDebouncedSearchQuery(searchQuery); // Update the debounced search query after a delay
+		}, 500); // 500ms delay
+
+		return () => clearTimeout(timer); // Clear previous timeout on new search input
+	}, [searchQuery]);
+
 	// Function to fetch all extensions
 	const fetchExtensions = async () => {
 		try {
 			const res = await window.api.retrieveExtensions();
 			setAllExtensions(res);
+			setInstalledExtensions(res); // Initially, show all extensions
 			setLoading(false);
 		} catch (error) {
 			console.error(error);
@@ -49,6 +62,15 @@ export const ExtensionsList = () => {
 		fetchExtensions();
 	}, []);
 
+	// Memoize the filtered extensions to prevent unnecessary recalculation
+	const filteredExtensions = useMemo(() => {
+		return installedExtensions.filter((extension) =>
+			extension.name
+				.toLowerCase()
+				.includes(debouncedSearchQuery.toLowerCase())
+		);
+	}, [installedExtensions, debouncedSearchQuery]);
+
 	return (
 		<div id='extensions-component'>
 			<div id='show-extensions'>
@@ -59,6 +81,8 @@ export const ExtensionsList = () => {
 							type='search'
 							placeholder='Search Extensions'
 							id='search-extensions'
+							value={searchQuery}
+							onChange={handleSearchChange} // Handle search input change
 						/>
 						<Checkbox
 							checked={isChecked}
@@ -76,26 +100,15 @@ export const ExtensionsList = () => {
 
 				{!loading && (
 					<div id='extensions-list-container'>
-						{isChecked &&
-							installedExtensions.map((extension, index) => (
-								<ExtensionCard
-									key={index}
-									name={extension.name}
-									description={extension.description}
-									image={extension.image}
-									installed={extension.installed}
-								/>
-							))}
-						{!isChecked &&
-							allExtensions.map((extension, index) => (
-								<ExtensionCard
-									key={index}
-									name={extension.name}
-									description={extension.description}
-									image={extension.image}
-									installed={extension.installed}
-								/>
-							))}
+						{filteredExtensions.map((extension, index) => (
+							<ExtensionCard
+								key={index}
+								name={extension.name}
+								description={extension.description}
+								image={extension.image}
+								installed={extension.installed}
+							/>
+						))}
 					</div>
 				)}
 			</div>
