@@ -8,7 +8,7 @@ export const MangaCard = ({ name, author, image }) => {
 		<div id='manga-card'>
 			<div id='card-container'>
 				<div id='image-container' className='card-container-children'>
-					<img src={image} alt='' />
+					<img className='manga-cover' src={image} alt='' />
 				</div>
 
 				<div id='text-container' className='card-container-children'>

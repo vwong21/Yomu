@@ -25,6 +25,7 @@ export const ExtensionCard = ({ name, description, image, installed }) => {
 	return (
 		<div className='extension-card'>
 			<img
+				className='extension-logo'
 				src={image}
 				style={{ width: '3rem', height: '3rem', borderRadius: '0' }}
 			/>
