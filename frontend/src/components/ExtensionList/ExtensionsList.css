@@ -4,7 +4,6 @@
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	gap: 3rem;
 	width: 100%;
 }
 
@@ -17,13 +16,37 @@
 	gap: 1.25rem;
 }
 
-#installed-extensions {
+#show-extensions {
 	width: 100%;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	gap: 2rem;
 }
-h2 {
-	margin-top: 2.25rem;
+
+#extensions-header {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	box-sizing: border-box;
+	width: 100%;
+	padding: 2rem 2rem 0 2rem;
+}
+#extensions-h2 {
 	font-weight: 500;
+	font-size: 1.25rem;
+	margin: 0;
+}
+
+#input-container {
+	background-color: #212121;
+	padding: 0.5rem;
+	width: 80%;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+#search-extensions {
+	all: unset;
 }
