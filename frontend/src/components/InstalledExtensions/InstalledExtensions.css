@@ -1,3 +1,4 @@
+/* Sets flex on the container and installed-extensions */
 #extensions-list-container {
 	width: 100%;
 	display: flex;
