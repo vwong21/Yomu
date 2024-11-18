@@ -1,5 +1,5 @@
 // Importing necessary modules from Electron and Node.js
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import {
@@ -19,9 +19,10 @@ let mainWindow;
 
 // Function to create the main application window
 const createWindow = () => {
+	const { width, height } = screen.getPrimaryDisplay().workAreaSize;
 	mainWindow = new BrowserWindow({
-		width: 1440,
-		height: 1024,
+		width: Math.floor(width * 0.567),
+		height: Math.floor(height * 0.711),
 		resizable: false,
 		// Title bar styles to replace ugly default
 		titleBarStyle: 'hidden',
