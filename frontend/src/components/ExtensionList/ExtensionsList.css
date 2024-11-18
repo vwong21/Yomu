@@ -1,3 +1,4 @@
+/* Styles to set the background color, sizing, and child positioning for the extensionList */
 #extensions-component {
 	background-color: #363636;
 	display: flex;
