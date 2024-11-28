@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import '../../Normalize.css';
-import './Library.css';
+import styles from './Library.module.css';
 import { MangaCard } from '../common/MangaCards/MangaCard';
 
 export const Library = () => {
@@ -24,15 +24,15 @@ export const Library = () => {
 
 	return (
 		// Includes title and MangaCard components
-		<section id='library-component'>
-			<header id='title'>
+		<section id={styles.libraryComponent}>
+			<header id={styles.title}>
 				<h1>Yomu</h1>
 			</header>
 
 			{/* sets a loading screen so manga loads after ipc call */}
 			{loading && <p>Loading</p>}
 			{!loading && (
-				<div id='library-container'>
+				<div id={styles.libraryContainer}>
 					{/* map over all favourites and return MangaCard */}
 					{favourites.map((favourite, index) => (
 						<MangaCard

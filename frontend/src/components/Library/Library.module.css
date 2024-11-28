@@ -1,5 +1,5 @@
 /* Style for title. Aligned with navbar */
-#library-component {
+#libraryComponent {
 	background-color: #363636;
 	display: flex;
 	flex-direction: column;
@@ -26,7 +26,7 @@ h1 {
 }
 
 /* Styles for library manga cards */
-#library-container {
+#libraryContainer {
 	display: flex;
 	flex-direction: column;
 	width: 85%;
@@ -35,6 +35,6 @@ h1 {
 	overflow-x: hidden;
 }
 
-#library-container::-webkit-scrollbar {
+#libraryContainer::-webkit-scrollbar {
 	display: none;
 }
