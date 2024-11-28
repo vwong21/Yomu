@@ -3,20 +3,20 @@ import { RiHomeLine } from 'react-icons/ri';
 import { RxHamburgerMenu } from 'react-icons/rx';
 import { IoExtensionPuzzleOutline } from 'react-icons/io5';
 import '../../Normalize.css';
-import './Nav.css';
+import styles from './Nav.module.css';
 import { Link } from 'react-router-dom';
 
 export const Nav = () => {
 	return (
 		// Nav section containing hamburger icon, home, and extension buttons
-		<section id='nav-section'>
-			<div id='nav-container'>
-				<RxHamburgerMenu className='nav-icons' />
+		<section id={styles.navSection}>
+			<div id={styles.navContainer}>
+				<RxHamburgerMenu className={styles.navIcons} />
 				<Link to='/'>
-					<RiHomeLine className='nav-icons' />
+					<RiHomeLine className={styles.navIcons} />
 				</Link>
 				<Link to='/extensions'>
-					<IoExtensionPuzzleOutline className='nav-icons' />
+					<IoExtensionPuzzleOutline className={styles.navIcons} />
 				</Link>
 			</div>
 		</section>

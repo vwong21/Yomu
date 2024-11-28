@@ -1,11 +1,11 @@
 /* background color same as library. Set nav-container to flex columns. Added padding and on hover for icons */
 
-#nav-section {
+#navSection {
 	height: 100%;
 	background-color: #363636;
 }
 
-#nav-container {
+#navContainer {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -13,7 +13,7 @@
 	justify-content: space-evenly;
 }
 
-.nav-icons {
+.navIcons {
 	font-size: 2rem;
 	padding: 0.75rem;
 	cursor: pointer;
@@ -21,6 +21,6 @@
 	color: #ffffff;
 }
 
-.nav-icons:hover {
+.navIcons:hover {
 	background-color: #212121;
 }
