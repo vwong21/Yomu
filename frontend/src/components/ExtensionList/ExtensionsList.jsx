@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import '../../Normalize.css';
-import './ExtensionsList.css';
+import styles from './ExtensionsList.module.css';
 import { ExtensionCard } from '../common/ExtensionCard/ExtensionCard';
 import Checkbox from 'react-custom-checkbox';
 
@@ -72,15 +72,15 @@ export const ExtensionsList = () => {
 	}, [installedExtensions, debouncedSearchQuery]);
 
 	return (
-		<div id='extensions-component'>
-			<div id='show-extensions'>
-				<header id='extensions-header'>
-					<h2 id='extensions-h2'>Extensions</h2>
-					<div id='input-container'>
+		<div id={styles.extensionsComponent}>
+			<div id={styles.showExtensions}>
+				<header id={styles.extensionsHeader}>
+					<h2 id={styles.extensionsH2}>Extensions</h2>
+					<div id={styles.inputContainer}>
 						<input
 							type='search'
 							placeholder='Search Extensions'
-							id='search-extensions'
+							id={styles.searchExtensions}
 							value={searchQuery}
 							onChange={handleSearchChange} // Handle search input change
 						/>
@@ -99,7 +99,7 @@ export const ExtensionsList = () => {
 				{loading && <p>Loading...</p>}
 
 				{!loading && (
-					<div id='extensions-list-container'>
+					<div id={styles.extensionsListContainer}>
 						{filteredExtensions.map((extension, index) => (
 							<ExtensionCard
 								key={index}
