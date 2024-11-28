@@ -21,8 +21,8 @@ let mainWindow;
 const createWindow = () => {
 	const { width, height } = screen.getPrimaryDisplay().workAreaSize;
 	mainWindow = new BrowserWindow({
-		width: Math.floor(width * 0.567),
-		height: Math.floor(height * 0.711),
+		width: Math.floor(width * 0.7),
+		height: Math.floor(height * 0.7),
 		resizable: false,
 		// Title bar styles to replace ugly default
 		titleBarStyle: 'hidden',

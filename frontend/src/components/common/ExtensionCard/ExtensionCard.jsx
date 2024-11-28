@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import '../../../Normalize.css';
-import './ExtensionCard.css';
+import styles from './ExtensionCard.module.css'; // Import the CSS module
 
 // Component that returns a card for each extension
 export const ExtensionCard = ({ name, description, image, installed }) => {
 	// State to see if the extension is installed. If it is, it will display a manage button instead of an install button and vice versa
 	const [isInstalled, setIsInstalled] = useState(installed);
 
-	// Refresh the page whenever the state is changed so that if the user installs or deletes an extension, the button that is rendered changes right away
+	// Log the installation state whenever it changes for debugging purposes
 	useEffect(() => console.log(isInstalled), [isInstalled]);
 
 	// Function that calls the downloadExtension function from the IPC which downloads the selected extension
@@ -15,31 +15,41 @@ export const ExtensionCard = ({ name, description, image, installed }) => {
 		try {
 			// Call to IPC
 			const res = await window.api.downloadExtension(extensionName);
-			if (res.status == 'success') {
+			if (res.status === 'success') {
+				// Update the state to reflect the installation
 				setIsInstalled(true);
 			}
 		} catch (error) {
+			// Log any errors that occur during installation
 			console.error(error);
 		}
 	};
+
+	// Render the card with details and an appropriate action button
 	return (
-		<div className='extension-card'>
+		<div className={styles.extensionCard}>
+			{/* Display the extension's logo */}
 			<img
-				className='extension-logo'
+				className={styles.extensionLogo}
 				src={image}
 				style={{ width: '3rem', height: '3rem', borderRadius: '0' }}
+				alt='extension logo'
 			/>
-			<div className='extension-card-details'>
-				<p className='extension-title'>{name}</p>
-				<p className='extension-details'>{description}</p>
-				<div className='extension-action-container'>
+			{/* Display the extension's details */}
+			<div className={styles.extensionCardDetails}>
+				<p className={styles.extensionTitle}>{name}</p>
+				<p className={styles.extensionDetails}>{description}</p>
+				<div className={styles.extensionActionContainer}>
 					{/* If the extension is installed, display a manage button, else display an install button */}
-					{isInstalled && <p className='extension-action'>Manage</p>}
+					{isInstalled && (
+						<p className={styles.extensionAction}>Manage</p>
+					)}
 					{!isInstalled && (
 						<p
-							className='extension-action'
-							id='install-button'
+							className={styles.extensionAction}
+							id={styles.installButton}
 							onClick={() => {
+								// Call the install function when the Install button is clicked
 								installExtension(name);
 							}}>
 							Install

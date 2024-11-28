@@ -1,6 +1,6 @@
 /* Sets flex to extension-card, extension-card-details, and extension-action-container. Sets positioning for card elements. Different coloring for action button */
 
-.extension-card {
+.extensionCard {
 	display: flex;
 	flex-direction: row;
 	width: 100%;
@@ -8,32 +8,32 @@
 	box-sizing: border-box;
 }
 
-.extension-logo {
+.extensionLogo {
 	padding: 0 1rem 0 0;
 }
 
-.extension-card-details {
+.extensionCardDetails {
 	display: flex;
 	flex-direction: column;
 	flex-grow: 1;
 }
 
-.extension-title {
+.extensionTitle {
 	font-weight: 600;
 	cursor: pointer;
 }
 
-.extension-details {
+.extensionDetails {
 	font-weight: 300;
 	opacity: 0.75;
 }
 
-.extension-action-container {
+.extensionActionContainer {
 	display: flex;
 	justify-content: flex-end;
 }
 
-.extension-action {
+.extensionAction {
 	text-align: center;
 	cursor: pointer;
 	display: inline-block;
@@ -42,6 +42,6 @@
 	font-size: small;
 }
 
-#install-button {
+#installButton {
 	background-color: #4caf50;
 }
