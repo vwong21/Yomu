@@ -21,16 +21,15 @@
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	gap: 2rem;
+	gap: 1rem;
 }
 
 #extensionsHeader {
 	display: flex;
 	flex-direction: column;
 	gap: 0.5rem;
-	box-sizing: border-box;
-	width: 100%;
-	padding: 2rem 2rem 0 2rem;
+	padding: 1rem;
+	width: 80%;
 }
 #extensionsH2 {
 	font-weight: 500;
@@ -40,7 +39,7 @@
 
 #inputContainer {
 	background-color: #212121;
-	padding: 0.5rem;
+	padding: 0.25rem;
 	width: 100%;
 	display: flex;
 	flex-direction: row;
@@ -49,4 +48,5 @@
 
 #searchExtensions {
 	all: unset;
+	font-size: 0.75rem;
 }

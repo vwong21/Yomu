@@ -11,7 +11,9 @@ export const Nav = () => {
 		// Nav section containing hamburger icon, home, and extension buttons
 		<section id={styles.navSection}>
 			<div id={styles.navContainer}>
-				<RxHamburgerMenu className={styles.navIcons} />
+				<div>
+					<RxHamburgerMenu className={styles.navIcons} />
+				</div>
 				<Link to='/'>
 					<RiHomeLine className={styles.navIcons} />
 				</Link>

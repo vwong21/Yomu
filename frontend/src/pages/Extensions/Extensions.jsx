@@ -7,7 +7,7 @@ import { Frame } from '../../components/Frame/Frame';
 
 export const Extensions = () => {
 	return (
-		<div id={styles.app}>
+		<div id='app' className={styles.app}>
 			<Frame />
 			<Nav />
 			<ExtensionsList />

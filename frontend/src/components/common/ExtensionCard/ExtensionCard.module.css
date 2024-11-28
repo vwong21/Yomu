@@ -1,4 +1,7 @@
 /* Sets flex to extension-card, extension-card-details, and extension-action-container. Sets positioning for card elements. Different coloring for action button */
+p {
+	font-size: 0.75rem;
+}
 
 .extensionCard {
 	display: flex;
@@ -34,12 +37,12 @@
 }
 
 .extensionAction {
+	margin-top: 0.25rem;
 	text-align: center;
 	cursor: pointer;
 	display: inline-block;
 	padding: 0.15rem 0.25rem 0.15rem 0.25rem;
 	border-radius: 3px;
-	font-size: small;
 }
 
 #installButton {

@@ -7,7 +7,7 @@ import { Frame } from '../../components/Frame/Frame';
 
 export const Home = () => {
 	return (
-		<div id={styles.app}>
+		<div id='app' className={styles.app}>
 			<Frame />
 			{/* 3 sections, navbar, library, and details */}
 			<Nav />
