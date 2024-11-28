@@ -4,7 +4,7 @@ import styles from './ExtensionsList.module.css';
 import { ExtensionCard } from '../common/ExtensionCard/ExtensionCard';
 import Checkbox from 'react-custom-checkbox';
 
-export const ExtensionsList = () => {
+export const ExtensionsList = ({ onExtensionSelect }) => {
 	// State that holds list of all extensions
 	const [allExtensions, setAllExtensions] = useState([]);
 	// State sets loading screen
@@ -107,6 +107,7 @@ export const ExtensionsList = () => {
 								description={extension.description}
 								image={extension.image}
 								installed={extension.installed}
+								onExtensionSelect={onExtensionSelect}
 							/>
 						))}
 					</div>

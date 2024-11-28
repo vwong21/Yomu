@@ -3,7 +3,13 @@ import '../../../Normalize.css';
 import styles from './ExtensionCard.module.css'; // Import the CSS module
 
 // Component that returns a card for each extension
-export const ExtensionCard = ({ name, description, image, installed }) => {
+export const ExtensionCard = ({
+	name,
+	description,
+	image,
+	installed,
+	onExtensionSelect,
+}) => {
 	// State to see if the extension is installed. If it is, it will display a manage button instead of an install button and vice versa
 	const [isInstalled, setIsInstalled] = useState(installed);
 
@@ -37,7 +43,11 @@ export const ExtensionCard = ({ name, description, image, installed }) => {
 			/>
 			{/* Display the extension's details */}
 			<div className={styles.extensionCardDetails}>
-				<p className={styles.extensionTitle}>{name}</p>
+				<p
+					className={styles.extensionTitle}
+					onClick={() => onExtensionSelect(name)}>
+					{name}
+				</p>
 				<p className={styles.extensionDetails}>{description}</p>
 				<div className={styles.extensionActionContainer}>
 					{/* If the extension is installed, display a manage button, else display an install button */}
