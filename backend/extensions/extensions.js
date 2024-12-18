@@ -7,6 +7,23 @@ import { error } from 'console';
 
 dotenv.config();
 
+/*
+Contents
+-------------------------------------
+logError(context, error) => throws json {status:'error', message: `Error in ${context}: ${error.message}}
+
+changeInstallJson(extensionName, setTo) => writes to obj in extensions.json: ? obj.name === extensionName: obj.installed = setTo
+
+checkSettings() => writes to obj in extensions.json: for extension in jsonFile: extension.installed = folders.include(extensionName)
+
+retrieveExtensions() => return extensionsList = returnObj = {name: obj.name, url: obj.url, description: obj.description, installed: obj.installed, image: obj.image,};
+
+downloadExtension(extensionName, branch='main') => fetches zip file from Github url, ? entry.entryname == extensionName : extract folder
+
+removeExtension(extensionName) => rm extensionName
+
+*/
+
 // Error logger function
 const logError = (context, error) => {
 	const message = `Error in ${context}: ${error.message || error}`;
@@ -80,11 +97,7 @@ export const checkSettings = async () => {
 
 	// Compare lists
 	jsonFile.forEach((extension) => {
-		if (!folders.includes(extension.name)) {
-			extension.installed = false;
-		} else {
-			extension.installed = true;
-		}
+		extension.installed = folders.includes(extension.name);
 	});
 	// Write to file
 	try {
