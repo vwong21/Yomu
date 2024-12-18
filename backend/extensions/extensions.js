@@ -38,23 +38,32 @@ const changeInstallJson = async (extensionName, setTo) => {
 			process.env.PATH_TO_EXTENSIONS,
 			'extensions.json'
 		);
+
 		// Read the file and parse it
 		const file = await fs.readFile(filePath, 'utf-8');
 		const jsonFile = JSON.parse(file);
 
-		// Check each object in the list and if the extension name is the same, mark it true
-		for (const obj of jsonFile) {
-			if (obj.hasOwnProperty('name') && obj.name == extensionName) {
-				if (setTo) {
-					obj.installed = true;
-				} else {
-					obj.installed = false;
+		if (!setTo) {
+			for (let i = 0; i < jsonFile.installed.length; i++) {
+				if (jsonFile.installed[i].name === extensionName) {
+					const [popped] = jsonFile.installed.splice(i, 1);
+
+					jsonFile.downloadable.push({ ...popped });
+					break;
+				}
+			}
+		} else {
+			for (let i = 0; i < jsonFile.downloadable.length; i++) {
+				if (jsonFile.downloadable[i].name === extensionName) {
+					const [popped] = jsonFile.downloadable.splice(i, 1);
+					jsonFile.installed.push({ ...popped });
+					break;
 				}
 			}
 		}
 
 		// Convert new data to string and write it to json file
-		const stringFile = JSON.stringify(jsonFile);
+		const stringFile = JSON.stringify(jsonFile, null, 2);
 		await fs.writeFile(filePath, stringFile);
 	} catch (error) {
 		return logError('writing to json file', error);
