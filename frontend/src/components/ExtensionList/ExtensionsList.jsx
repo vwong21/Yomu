@@ -6,30 +6,19 @@ import Checkbox from 'react-custom-checkbox';
 
 export const ExtensionsList = ({ onExtensionSelect }) => {
 	// State that holds list of all extensions
-	const [allExtensions, setAllExtensions] = useState([]);
+	const [availableExtensions, setAvailableExtensions] = useState([]);
 	// State sets loading screen
 	const [loading, setLoading] = useState(true);
 	// State that holds list of installed extensions
 	const [installedExtensions, setInstalledExtensions] = useState([]);
 
-	const [isChecked, setIsChecked] = useState(false);
+	const [isChecked, setIsChecked] = useState(true);
 
 	const [searchQuery, setSearchQuery] = useState(''); // Track search input
 	const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(''); // Debounced search input
 
 	const handleChecked = (checked) => {
 		setIsChecked(checked);
-
-		// Filter extensions to show only installed ones when checked is true
-		if (checked) {
-			const installed = allExtensions.filter(
-				(extension) => extension.installed === true
-			);
-			setInstalledExtensions(installed);
-		} else {
-			// If unchecked, show all extensions
-			setInstalledExtensions(allExtensions);
-		}
 	};
 
 	const handleSearchChange = (event) => {
@@ -49,8 +38,9 @@ export const ExtensionsList = ({ onExtensionSelect }) => {
 	const fetchExtensions = async () => {
 		try {
 			const res = await window.api.retrieveExtensions();
-			setAllExtensions(res);
-			setInstalledExtensions(res); // Initially, show all extensions
+			console.log(res);
+			setAvailableExtensions(res.downloadable);
+			setInstalledExtensions(res.installed);
 			setLoading(false);
 		} catch (error) {
 			console.error(error);
@@ -63,19 +53,27 @@ export const ExtensionsList = ({ onExtensionSelect }) => {
 	}, []);
 
 	// Memoize the filtered extensions to prevent unnecessary recalculation
-	const filteredExtensions = useMemo(() => {
-		return installedExtensions.filter((extension) =>
+	const displayedExtensions = useMemo(() => {
+		const source = isChecked ? installedExtensions : availableExtensions;
+		return source.filter((extension) =>
 			extension.name
 				.toLowerCase()
 				.includes(debouncedSearchQuery.toLowerCase())
 		);
-	}, [installedExtensions, debouncedSearchQuery]);
+	}, [
+		isChecked,
+		installedExtensions,
+		availableExtensions,
+		debouncedSearchQuery,
+	]);
 
 	return (
 		<div id={styles.extensionsComponent}>
 			<div id={styles.showExtensions}>
 				<header id={styles.extensionsHeader}>
-					<h2 id={styles.extensionsH2}>Extensions</h2>
+					{isChecked && <h2 id={styles.extensionsH2}>Extensions</h2>}
+					{!isChecked && <h2 id={styles.extensionsH2}>Browse</h2>}
+
 					<div id={styles.inputContainer}>
 						<input
 							type='search'
@@ -100,16 +98,23 @@ export const ExtensionsList = ({ onExtensionSelect }) => {
 
 				{!loading && (
 					<div id={styles.extensionsListContainer}>
-						{filteredExtensions.map((extension, index) => (
-							<ExtensionCard
-								key={index}
-								name={extension.name}
-								description={extension.description}
-								image={extension.image}
-								installed={extension.installed}
-								onExtensionSelect={onExtensionSelect}
-							/>
-						))}
+						{displayedExtensions.map((extension, index) => {
+							const isInstalled = installedExtensions.some(
+								(installedExtension) =>
+									installedExtension.name === extension.name
+							);
+							console.log(isInstalled, extension.name);
+							return (
+								<ExtensionCard
+									key={index}
+									name={extension.name}
+									description={extension.description}
+									image={extension.image}
+									installed={isInstalled} // Dynamically determine installed state
+									onExtensionSelect={onExtensionSelect}
+								/>
+							);
+						})}
 					</div>
 				)}
 			</div>

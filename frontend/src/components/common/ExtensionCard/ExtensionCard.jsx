@@ -14,7 +14,9 @@ export const ExtensionCard = ({
 	const [isInstalled, setIsInstalled] = useState(installed);
 
 	// Log the installation state whenever it changes for debugging purposes
-	useEffect(() => console.log(isInstalled), [isInstalled]);
+	useEffect(() => {
+		setIsInstalled(installed);
+	}, [installed]);
 
 	// Function that calls the downloadExtension function from the IPC which downloads the selected extension
 	const installExtension = async (extensionName) => {

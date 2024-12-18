@@ -125,19 +125,8 @@ export const retrieveExtensions = async () => {
 	} catch (error) {
 		return logError('reading json file', error);
 	}
-	// Loop through the json contents and push to new list. Doing this so that if project scales, it will be easy to manage what the renderer receives
-	const extensionsList = [];
-	for (const obj of jsonFile) {
-		const returnObj = {
-			name: obj.name,
-			url: obj.url,
-			description: obj.description,
-			installed: obj.installed,
-			image: obj.image,
-		};
-		extensionsList.push(returnObj);
-	}
-	return extensionsList;
+
+	return jsonFile;
 };
 
 // Function to download extension

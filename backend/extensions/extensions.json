@@ -1,1 +1,20 @@
-[{"name":"MangaDex","url":"https://mangadex.org/","extensionDetails":["vwong21","Yomu_Extensions","MangaDex"],"description":"Uses MangaDex API","image":"https://avatars.githubusercontent.com/u/100574686?s=280&v=4","installed":true},{"name":"MangaSee","url":"https://mangasee123.com/","extensionDetails":["vwong21","Yomu_Extensions","MangaSee"],"description":"Uses MangaSee API","image":"https://user-images.githubusercontent.com/82051463/113750444-c8267d00-96d8-11eb-825e-7a84df50ab44.png","installed":false}]
+{
+	"installed": [
+		{
+			"name": "MangaDex",
+			"url": "https://mangadex.org/",
+			"extensionDetails": ["vwong21", "Yomu_Extensions", "MangaDex"],
+			"description": "Uses MangaDex API",
+			"image": "https://avatars.githubusercontent.com/u/100574686?s=280&v=4"
+		}
+	],
+	"downloadable": [
+		{
+			"name": "MangaSee",
+			"url": "https://mangasee123.com/",
+			"extensionDetails": ["vwong21", "Yomu_Extensions", "MangaSee"],
+			"description": "Uses MangaSee API",
+			"image": "https://user-images.githubusercontent.com/82051463/113750444-c8267d00-96d8-11eb-825e-7a84df50ab44.png"
+		}
+	]
+}
