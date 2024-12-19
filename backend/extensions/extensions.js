@@ -104,10 +104,24 @@ export const checkSettings = async () => {
 		return logError('getting json file contents', error);
 	}
 
-	// Compare lists
-	jsonFile.forEach((extension) => {
-		extension.installed = folders.includes(extension.name);
-	});
+	// Loop through installed and get the name. If the name is not in folders, move it to downloadable
+	for (let i = 0; i < jsonFile.installed.length; i++) {
+		const name = jsonFile.installed[i].name;
+		if (!folders.includes(name)) {
+			const [popped] = jsonFile.installed.splice(i, 1);
+			jsonFile.downloadable.push({ ...popped });
+		}
+	}
+
+	// Loop through downloadable and get the name. If the name is in folders, move it to installed
+	for (let i = 0; i < jsonFile.downloadable.length; i++) {
+		const name = jsonFile.downloadable[i].name;
+		if (folders.includes(name)) {
+			const [popped] = jsonFile.downloadable.splice(i, 1);
+			jsonFile.installed.push({ ...popped });
+		}
+	}
+
 	// Write to file
 	try {
 		const newJson = JSON.stringify(jsonFile);
