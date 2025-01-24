@@ -1,4 +1,21 @@
 #browseContainer {
 	width: 100%;
 	background-color: #212121;
+	display: flex;
+	align-items: center;
+}
+
+#gridContainer {
+	width: 100%;
+	display: grid;
+	grid-template-columns: repeat(
+		auto-fill,
+		minmax(200px, 1fr)
+	); /* Responsive columns */
+	gap: 2rem; /* Space between items */
+	padding: 2rem; /* Optional padding */
+	justify-items: center; /* Center items horizontally */
+	align-items: center; /* Center items vertically */
+	height: 95vh;
+	overflow-y: auto;
 }

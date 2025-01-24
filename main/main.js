@@ -10,6 +10,16 @@ import {
 } from '../backend/extensions/extensions.js';
 import dotenv from 'dotenv';
 
+// temporary imports for extensions
+
+import { browseMangaDex } from '../backend/extensions/MangaDex/mangadex.js';
+
+const browseFunctions = {
+	MangaDex: browseMangaDex,
+};
+
+// temporary imports for extensions
+
 dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
@@ -102,12 +112,34 @@ const mangaDetails = [
 	},
 ];
 
+// Function to get browse results from manga source
+const browseManga = async (event, source) => {
+	console.log(source);
+	try {
+		const browseFunction = browseFunctions[source];
+		if (!browseFunction) {
+			throw new Error('Invalid source');
+		}
+		const res = await browseFunction();
+		console.log(res);
+		return res;
+	} catch (error) {
+		console.error(error);
+		return error;
+	}
+};
+
 // Function to get the details of the list of manga and return a promise
 const getMangaDetails = async () => {
 	return new Promise((resolve) => {
 		resolve(mangaDetails);
 	});
 };
+
+// Sends browse results to renderer
+ipcMain.handle('browse-manga', async (event, source) => {
+	return await browseManga(event, source);
+});
 
 // Sends manga details to renderer
 ipcMain.handle('get-manga-details', getMangaDetails);
