@@ -4,5 +4,6 @@ import styles from './Browse.module.css';
 
 export const Browse = ({ selectedExtension }) => {
 	console.log(`from Browse: ${selectedExtension}`);
+
 	return <div id={styles.browseContainer}></div>;
 };
