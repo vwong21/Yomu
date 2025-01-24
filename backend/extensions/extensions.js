@@ -124,7 +124,7 @@ export const checkSettings = async () => {
 
 	// Write to file
 	try {
-		const newJson = JSON.stringify(jsonFile);
+		const newJson = JSON.stringify(jsonFile, null, 2);
 		await fs.writeFile(extensionsJsonPath, newJson);
 	} catch (error) {
 		return logError('writing to new file', error);

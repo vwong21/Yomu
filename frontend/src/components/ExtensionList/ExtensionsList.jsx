@@ -38,7 +38,6 @@ export const ExtensionsList = ({ onExtensionSelect }) => {
 	const fetchExtensions = async () => {
 		try {
 			const res = await window.api.retrieveExtensions();
-			console.log(res);
 			setAvailableExtensions(res.downloadable);
 			setInstalledExtensions(res.installed);
 			setLoading(false);
@@ -103,7 +102,6 @@ export const ExtensionsList = ({ onExtensionSelect }) => {
 								(installedExtension) =>
 									installedExtension.name === extension.name
 							);
-							console.log(isInstalled, extension.name);
 							return (
 								<ExtensionCard
 									key={index}

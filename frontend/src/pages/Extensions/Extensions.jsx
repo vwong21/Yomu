@@ -4,6 +4,7 @@ import styles from './Extensions.module.css';
 import { Nav } from '../../components/Nav/Nav';
 import { ExtensionsList } from '../../components/ExtensionList/ExtensionsList';
 import { Frame } from '../../components/Frame/Frame';
+import { Browse } from '../../components/Browse/Browse';
 
 export const Extensions = () => {
 	// State to manage the extension the user clicks on
@@ -18,7 +19,7 @@ export const Extensions = () => {
 			<Frame />
 			<Nav />
 			<ExtensionsList onExtensionSelect={handleExtensionSelect} />
-			<section id={styles.details}></section>
+			<Browse selectedExtension={selectedExtension} />
 		</div>
 	);
 };
