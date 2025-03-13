@@ -6,15 +6,24 @@ import { MangaCardBrowse } from '../common/MangaCardBrowse/MangaCardBrowse';
 export const Browse = ({ selectedExtension }) => {
 	const [loading, setLoading] = useState(false);
 	const [mangaObj, setMangaObj] = useState([]);
+	const [offset, setOffset] = useState(0);
 
 	const browseManga = async () => {
+		if (loading) return;
+		if (!selectedExtension) return;
 		try {
+			console.log(offset);
 			setLoading(true);
-			const res = await window.api.browseManga(selectedExtension);
+			const res = await window.api.browseManga(selectedExtension, offset);
 			console.log(res);
 			if (Array.isArray(res)) {
 				setMangaObj((prev) => [...prev, ...res]);
 			}
+			setOffset((prevOffset) => {
+				const nextOffset =
+					prevOffset + (Array.isArray(res) ? res.length : 0);
+				return nextOffset;
+			});
 		} catch (error) {
 			console.error(error);
 		} finally {
@@ -22,6 +31,8 @@ export const Browse = ({ selectedExtension }) => {
 		}
 	};
 	useEffect(() => {
+		setMangaObj([]);
+		setOffset(0);
 		browseManga();
 	}, [selectedExtension]);
 

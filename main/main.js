@@ -113,14 +113,14 @@ const mangaDetails = [
 ];
 
 // Function to get browse results from manga source
-const browseManga = async (event, source) => {
+const browseManga = async (event, source, offset) => {
 	console.log(source);
 	try {
 		const browseFunction = browseFunctions[source];
 		if (!browseFunction) {
 			throw new Error('Invalid source');
 		}
-		const res = await browseFunction();
+		const res = await browseFunction(offset);
 		console.log(res);
 		return res;
 	} catch (error) {
@@ -137,8 +137,8 @@ const getMangaDetails = async () => {
 };
 
 // Sends browse results to renderer
-ipcMain.handle('browse-manga', async (event, source) => {
-	return await browseManga(event, source);
+ipcMain.handle('browse-manga', async (event, source, offset) => {
+	return await browseManga(event, source, offset);
 });
 
 // Sends manga details to renderer
