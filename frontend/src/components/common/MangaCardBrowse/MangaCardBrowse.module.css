@@ -37,3 +37,27 @@
 		height: 2.8rem; /* slightly taller to accommodate bigger text */
 	}
 }
+
+@media screen and (min-width: 1700px) {
+	.mangaCardBrowseContainer {
+		width: clamp(16rem, 10vw, 16rem); /* increase width on large screens */
+	}
+
+	.title {
+		font-size: 0.9rem;
+		line-height: 1.2rem;
+		height: 2.8rem; /* slightly taller to accommodate bigger text */
+	}
+}
+
+@media screen and (min-width: 2400px) {
+	.mangaCardBrowseContainer {
+		width: clamp(20rem, 10vw, 16rem); /* increase width on large screens */
+	}
+
+	.title {
+		font-size: 1.2rem;
+		line-height: 1.2rem;
+		height: 2.8rem; /* slightly taller to accommodate bigger text */
+	}
+}
