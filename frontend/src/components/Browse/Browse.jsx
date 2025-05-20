@@ -6,23 +6,23 @@ import styles from './Browse.module.css';
 import { MangaCardBrowse } from '../common/MangaCardBrowse/MangaCardBrowse';
 
 const COLUMN_COUNT = 4;
-const CARD_HEIGHT_REM = 25; // 400px / 16
 const VERTICAL_GAP_REM = 1; // 16px / 16
-const HORIZONTAL_GAP_REM = 0.75; // 12px / 16
 const PADDING_REM = 2;
 const FETCH_BATCH_SIZE = 40;
 const REM_TO_PX = 16;
-const ROW_HEIGHT = (CARD_HEIGHT_REM + VERTICAL_GAP_REM) * REM_TO_PX;
 
 export const Browse = ({ selectedExtension }) => {
 	const [mangaObj, setMangaObj] = useState([]);
 	const [offset, setOffset] = useState(0);
 	const [hasMore, setHasMore] = useState(true);
+
 	const loadingRef = useRef(false);
+	const hasMoreRef = useRef(true);
 
 	const fetchManga = useCallback(
 		async (currentOffset) => {
-			if (loadingRef.current || !selectedExtension || !hasMore) return;
+			if (loadingRef.current || !selectedExtension || !hasMoreRef.current)
+				return;
 
 			loadingRef.current = true;
 			try {
@@ -38,24 +38,31 @@ export const Browse = ({ selectedExtension }) => {
 
 					if (res.length < FETCH_BATCH_SIZE) {
 						setHasMore(false);
+						hasMoreRef.current = false;
+					} else {
+						setHasMore(true);
+						hasMoreRef.current = true;
 					}
 				} else {
 					setHasMore(false);
+					hasMoreRef.current = false;
 				}
 			} catch (error) {
 				console.error('Error fetching manga:', error);
 				setHasMore(false);
+				hasMoreRef.current = false;
 			} finally {
 				loadingRef.current = false;
 			}
 		},
-		[selectedExtension, hasMore]
+		[selectedExtension]
 	);
 
 	useEffect(() => {
 		setMangaObj([]);
 		setOffset(0);
 		setHasMore(true);
+		hasMoreRef.current = true;
 		loadingRef.current = false;
 		fetchManga(0);
 	}, [selectedExtension, fetchManga]);
@@ -67,7 +74,7 @@ export const Browse = ({ selectedExtension }) => {
 
 			if (
 				!loadingRef.current &&
-				hasMore &&
+				hasMoreRef.current &&
 				(visibleRowStopIndex >= lastRow ||
 					overscanRowStopIndex >= lastRow)
 			) {
@@ -76,7 +83,7 @@ export const Browse = ({ selectedExtension }) => {
 				}
 			}
 		},
-		[hasMore, mangaObj.length, offset, fetchManga]
+		[mangaObj.length, offset, fetchManga]
 	);
 
 	const rowCount =
@@ -97,7 +104,7 @@ export const Browse = ({ selectedExtension }) => {
 				<div
 					style={{
 						width: '100%',
-						height: `${CARD_HEIGHT_REM}rem`,
+						height: '100%',
 						boxSizing: 'border-box',
 						display: 'flex',
 						flexDirection: 'column',
@@ -131,6 +138,10 @@ export const Browse = ({ selectedExtension }) => {
 					const availableWidth = width - totalHorizontalPadding;
 					const columnWidth = availableWidth / COLUMN_COUNT;
 
+					// Maintain 3:5 aspect ratio (width:height) + vertical gap
+					const cardHeight = columnWidth * (5 / 3);
+					const rowHeight = cardHeight + VERTICAL_GAP_REM * REM_TO_PX;
+
 					return (
 						<div
 							style={{
@@ -144,7 +155,7 @@ export const Browse = ({ selectedExtension }) => {
 								columnWidth={columnWidth}
 								height={height}
 								rowCount={rowCount}
-								rowHeight={ROW_HEIGHT}
+								rowHeight={rowHeight}
 								width={availableWidth}
 								overscanRowCount={3}
 								onItemsRendered={handleItemsRendered}

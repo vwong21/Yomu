@@ -12,7 +12,14 @@ import dotenv from 'dotenv';
 
 // temporary imports for extensions
 
-import { browseMangaDex } from '../backend/extensions/MangaDex/mangadex.js';
+let browseMangaDex;
+
+try {
+	const module = await import('../backend/extensions/MangaDex/mangadex.js');
+	browseMangaDex = module.browseMangaDex;
+} catch (err) {
+	console.warn('MangaDex extension not found, skipping...');
+}
 
 const browseFunctions = {
 	MangaDex: browseMangaDex,

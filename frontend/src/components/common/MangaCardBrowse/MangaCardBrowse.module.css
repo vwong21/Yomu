@@ -1,21 +1,39 @@
 .mangaCardBrowseContainer {
 	cursor: pointer;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: clamp(10rem, 12vw, 13.5rem); /* same width as coverArt */
 }
 
 .coverArt {
-	width: 216px; /* 144px * 1.5 */
-	height: 364.5px; /* 243px * 1.5 */
+	width: 100%;
+	aspect-ratio: 3 / 5;
 	border-radius: 0.5rem;
 }
 
 .title {
-	width: 144px;
+	font-size: 0.65rem;
+	width: 100%;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	display: -webkit-box;
 	-webkit-line-clamp: 2;
 	-webkit-box-orient: vertical;
-	line-height: 1.2em;
-	max-height: 2.4em;
+	line-height: 0.65rem; /* Reduced from 1.2rem */
+	height: 2rem; /* Adjusted to fit two lines at this line-height */
 	white-space: normal;
+	text-align: center;
+	margin-top: 0.5rem;
+}
+@media screen and (min-width: 1300px) {
+	.mangaCardBrowseContainer {
+		width: clamp(14rem, 10vw, 16rem); /* increase width on large screens */
+	}
+
+	.title {
+		font-size: 0.75rem;
+		line-height: 1.2rem;
+		height: 2.8rem; /* slightly taller to accommodate bigger text */
+	}
 }
