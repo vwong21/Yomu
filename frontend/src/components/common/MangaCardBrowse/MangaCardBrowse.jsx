@@ -5,7 +5,12 @@ import styles from './MangaCardBrowse.module.css';
 export const MangaCardBrowse = ({ id, title, coverArt }) => {
 	return (
 		<div className={styles.mangaCardBrowseContainer}>
-			<img className={styles.coverArt} src={coverArt} alt='' />
+			<img
+				className={styles.coverArt}
+				src={coverArt}
+				alt=''
+				loading='lazy'
+			/>
 			<p className={styles.title}>{title.en}</p>
 		</div>
 	);
