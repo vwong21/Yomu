@@ -9,6 +9,7 @@ export const ExtensionCard = ({
 	image,
 	installed,
 	onExtensionSelect,
+	onExtensionInstalled,
 }) => {
 	// State to see if the extension is installed. If it is, it will display a manage button instead of an install button and vice versa
 	const [isInstalled, setIsInstalled] = useState(installed);
@@ -26,6 +27,7 @@ export const ExtensionCard = ({
 			if (res.status === 'success') {
 				// Update the state to reflect the installation
 				setIsInstalled(true);
+				onExtensionInstalled(); // Fetch extensions again
 			}
 		} catch (error) {
 			// Log any errors that occur during installation

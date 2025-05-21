@@ -110,6 +110,7 @@ export const ExtensionsList = ({ onExtensionSelect }) => {
 									image={extension.image}
 									installed={isInstalled} // Dynamically determine installed state
 									onExtensionSelect={onExtensionSelect}
+									onExtensionInstalled={fetchExtensions} // Pass fetch function as prop
 								/>
 							);
 						})}
