@@ -13,17 +13,26 @@ import dotenv from 'dotenv';
 // temporary imports for extensions
 
 let browseMangaDex;
+const browseFunctions = {};
 
-try {
-	const module = await import('../backend/extensions/MangaDex/mangadex.js');
-	browseMangaDex = module.browseMangaDex;
-} catch (err) {
-	console.warn('MangaDex extension not found, skipping...');
-}
-
-const browseFunctions = {
-	MangaDex: browseMangaDex,
+const updateModules = async () => {
+	try {
+		const module = await import(
+			'../backend/extensions/MangaDex/mangadex.js'
+		);
+		browseMangaDex = module.browseMangaDex;
+		browseFunctions.MangaDex = browseMangaDex;
+		console.log('browseMangaDex loaded:', browseMangaDex);
+	} catch (err) {
+		console.warn('MangaDex extension not found, skipping...');
+		console.error(err); // Optional for debugging
+	}
 };
+
+// Example usage after loading
+(async () => {
+	await updateModules();
+})();
 
 // temporary imports for extensions
 
@@ -173,6 +182,7 @@ ipcMain.handle('retrieve-extensions', async () => {
 ipcMain.handle('download-extension', async (event, extensionName) => {
 	try {
 		const res = await downloadExtension(extensionName);
+		updateModules();
 		return res;
 	} catch (error) {
 		console.error(error);
