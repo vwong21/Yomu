@@ -3,12 +3,12 @@
 	background-color: #212121;
 	display: flex;
 	flex-direction: column;
+	height: 100vh;
 }
 
 #browseContainer {
 	position: relative;
 	width: 100%;
-	height: 100vh;
 	display: flex;
 	flex-direction: column;
 	will-change: transform;
@@ -17,15 +17,15 @@
 }
 
 #searchContainer {
-	padding: 1rem 2rem 0 2rem;
+	padding: 1rem 0 0 3rem;
 	display: flex;
 	flex-direction: row;
-	justify-content: center;
+
 }
 
 #searchInput {
 	padding: 0.5rem 0 0.5rem 0.75rem;
-	width: 92%;
+	width: 25%;
 	background-color: #363636;
 	border-style: none;
 	border-radius: 0.5rem 0 0 0.5rem;
@@ -34,7 +34,7 @@
 }
 
 #search {
-	width: 8%;
+
 	background-color: #363636;
 	border-style: none;
 	border-radius: 0 0.5rem 0.5rem 0;

@@ -1,7 +1,8 @@
 // Importing necessary modules from Electron and Node.js
 import { app, BrowserWindow, ipcMain, screen } from 'electron';
-import { fileURLToPath } from 'url';
+import { fileURLToPath, pathToFileURL } from 'url';
 import { dirname, join } from 'path';
+import { readdir } from 'fs/promises';
 import {
 	checkSettings,
 	retrieveExtensions,
@@ -10,38 +11,57 @@ import {
 } from '../backend/extensions/extensions.js';
 import dotenv from 'dotenv';
 
-// temporary imports for extensions
-
-let browseMangaDex;
-const browseFunctions = {};
-
-const updateModules = async () => {
-	try {
-		const module = await import(
-			'../backend/extensions/MangaDex/mangadex.js'
-		);
-		browseMangaDex = module.browseMangaDex;
-		browseFunctions.MangaDex = browseMangaDex;
-		console.log('browseMangaDex loaded:', browseMangaDex);
-	} catch (err) {
-		console.warn('MangaDex extension not found, skipping...');
-		console.error(err); // Optional for debugging
-	}
-};
-
-// Example usage after loading
-(async () => {
-	await updateModules();
-})();
-
-// temporary imports for extensions
-
 dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 let mainWindow;
+
+// Extension function registries
+const browseFunctions = {};
+const searchFunctions = {};
+
+// Dynamically import all extensions
+const extensionsDir = join(__dirname, '../backend/extensions');
+const updateModules = async () => {
+	try {
+		const folders = await readdir(extensionsDir, { withFileTypes: true });
+
+		for (const dirent of folders) {
+			if (dirent.isDirectory()) {
+				const extensionName = dirent.name;
+				const modulePath = join(extensionsDir, extensionName, `${extensionName.toLowerCase()}.js`);
+				const moduleURL = pathToFileURL(modulePath).href;
+
+				console.log(`Attempting to load extension: ${extensionName}`);
+				console.log(`Resolved module path: ${moduleURL}`);
+
+				try {
+					const module = await import(moduleURL);
+
+					if (module.browseManga) {
+						browseFunctions[extensionName] = module.browseManga;
+					}
+					if (module.searchManga) {
+						searchFunctions[extensionName] = module.searchManga;
+					}
+					console.log(`✅ Loaded extension: ${extensionName}`);
+				} catch (err) {
+					console.warn(`⚠️ Extension ${extensionName} could not be loaded. Skipping...`);
+					console.error(err.message);
+				}
+			}
+		}
+	} catch (err) {
+		console.error('Error loading modules:', err);
+	}
+};
+
+// Load extensions at startup
+(async () => {
+	await updateModules();
+})();
 
 // Function to create the main application window
 const createWindow = () => {
@@ -50,22 +70,20 @@ const createWindow = () => {
 		width: Math.floor(width * 0.7),
 		height: Math.floor(height * 0.7),
 		resizable: false,
-		// Title bar styles to replace ugly default
 		titleBarStyle: 'hidden',
 		titleBarOverlay: {
 			color: '#212121',
 			symbolColor: '#ffffff',
 		},
 		webPreferences: {
-			contextIsolation: true, // Enable context isolation for security
-			devTools: true, // Allow opening dev tools
-			nodeIntegration: false, // Set to false for security
-			webSecurity: false, // Disable web security (consider enabling in production)
-			preload: join(__dirname, 'preload.js'), // Path to the preload script
+			contextIsolation: true,
+			devTools: true,
+			nodeIntegration: false,
+			webSecurity: false,
+			preload: join(__dirname, 'preload.js'),
 		},
 	});
 
-	// For development purposes to reload automatically
 	const startURL =
 		process.env.NODE_ENV === 'development'
 			? 'http://localhost:3000'
@@ -74,10 +92,7 @@ const createWindow = () => {
 					protocol: 'file',
 			  });
 
-	// For development purposes to open dev tools
 	mainWindow.webContents.openDevTools();
-
-	// Start URL will be localhost in dev or React build in prod
 	mainWindow.loadURL(startURL);
 	mainWindow.on('closed', () => (mainWindow = null));
 };
@@ -88,23 +103,19 @@ app.on('ready', () => {
 	checkSettings();
 });
 
-// For Mac since MacOS apps keep running while all windows closed
 app.on('window-all-closed', () => {
 	if (process.platform !== 'darwin') {
 		app.quit();
 	}
 });
 
-// For MacOS if app is running but no windows and user clicks on app, create a new window
 app.on('activate', () => {
 	if (mainWindow === null) {
 		createWindow();
 	}
 });
 
-// IPC logic starts here
-
-// Placeholder manga details
+// Placeholder manga details (for mock/testing)
 const mangaDetails = [
 	{
 		name: 'Naruto',
@@ -115,8 +126,7 @@ const mangaDetails = [
 	{
 		name: 'Dragon Ball',
 		author: 'Akira Toriyama',
-		description:
-			'Dragon Ball is a Japanese media franchise created by Akira Toriyama in 1984',
+		description: 'Dragon Ball is a Japanese media franchise created by Akira Toriyama in 1984',
 		image: 'https://mangadex.org/covers/40bc649f-7b49-4645-859e-6cd94136e722/51c0756f-a053-46d0-a405-246a78541df2.jpg.512.jpg',
 	},
 	{
@@ -128,45 +138,52 @@ const mangaDetails = [
 	},
 ];
 
-// Function to get browse results from manga source
-const browseManga = async (event, source, offset) => {
-	console.log(source);
+const searchManga = async (event, source, target) => {
 	try {
-		const browseFunction = browseFunctions[source];
-		if (!browseFunction) {
-			throw new Error('Invalid source');
+		const searchFunction = searchFunctions[source];
+		if (!searchFunction) {
+			throw new Error(`Invalid source: ${source}`);
 		}
-		const res = await browseFunction(offset);
-		console.log(res);
-		return res;
+		const result = await searchFunction(target)
+		return result
 	} catch (error) {
 		console.error(error);
 		return error;
 	}
 };
 
-// Function to get the details of the list of manga and return a promise
+// Send browse results to renderer
+const browseManga = async (event, source, offset) => {
+	try {
+		const browseFunction = browseFunctions[source];
+		if (!browseFunction) {
+			throw new Error(`Invalid source: ${source}`);
+		}
+		const result = await browseFunction(offset);
+		return result;
+	} catch (error) {
+		console.error(error);
+		return error;
+	}
+};
+
+// Dummy manga details (optional, for testing or fallback)
 const getMangaDetails = async () => {
 	return new Promise((resolve) => {
 		resolve(mangaDetails);
 	});
 };
 
-// Sends browse results to renderer
+// IPC Handlers
+ipcMain.handle('search-manga', async (event, source, target) => {
+	return await searchManga(event, source, target);
+});
+
 ipcMain.handle('browse-manga', async (event, source, offset) => {
 	return await browseManga(event, source, offset);
 });
 
-// Sends manga details to renderer
 ipcMain.handle('get-manga-details', getMangaDetails);
-
-// To call function
-// downloadExtension("vwong21", "Yomu_Extensions", "MangaDex")
-//     .catch((error) => {
-//     console.error(error);
-//     });
-
-// removeExtension('MangaDex')
 
 ipcMain.handle('retrieve-extensions', async () => {
 	try {
@@ -178,11 +195,10 @@ ipcMain.handle('retrieve-extensions', async () => {
 	}
 });
 
-// Receives extension name within the folderPath variable and calls downloadAndExtractFolder
 ipcMain.handle('download-extension', async (event, extensionName) => {
 	try {
 		const res = await downloadExtension(extensionName);
-		updateModules();
+		await updateModules();
 		return res;
 	} catch (error) {
 		console.error(error);

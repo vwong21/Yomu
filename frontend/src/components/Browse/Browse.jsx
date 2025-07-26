@@ -13,12 +13,55 @@ const FETCH_BATCH_SIZE = 40;
 const REM_TO_PX = 16;
 
 export const Browse = ({ selectedExtension }) => {
+	const [searchInput, setSearchInput] = useState('')
 	const [mangaObj, setMangaObj] = useState([]);
 	const [offset, setOffset] = useState(0);
 	const [hasMore, setHasMore] = useState(true);
 
 	const loadingRef = useRef(false);
 	const hasMoreRef = useRef(true);
+
+const handleSearch = async () => {
+	if (!selectedExtension || !searchInput.trim()) {
+		console.log('Search aborted: missing extension or empty input');
+		return;
+	}
+
+	console.log(`Searching for "${searchInput.trim()}" using ${selectedExtension}`);
+	loadingRef.current = true;
+
+	try {
+		const res = await window.api.searchManga(
+			selectedExtension,
+			searchInput.trim()
+		);
+
+		console.log('Raw search response:', res);
+
+		if (Array.isArray(res) && res.length > 0) {
+			console.log(`Search successful. Found ${res.length} results.`);
+			setMangaObj(res);
+			setOffset(res.length);
+			setHasMore(false); // disable infinite scroll after search
+			hasMoreRef.current = false;
+		} else {
+			console.log('Search returned no results.');
+			setMangaObj([]);
+			setHasMore(false);
+			hasMoreRef.current = false;
+		}
+	} catch (error) {
+		console.error('Search failed:', error);
+		setMangaObj([]);
+		setHasMore(false);
+		hasMoreRef.current = false;
+	} finally {
+		loadingRef.current = false;
+		console.log(mangaObj)
+		console.log('Search completed.');
+	}
+};
+
 
 	const fetchManga = useCallback(
 		async (currentOffset) => {
@@ -58,6 +101,17 @@ export const Browse = ({ selectedExtension }) => {
 		},
 		[selectedExtension]
 	);
+
+	useEffect(() => {
+	if (searchInput.trim() === '') {
+			setMangaObj([]);
+			setOffset(0);
+			setHasMore(true);
+			hasMoreRef.current = true;
+			loadingRef.current = false;
+			fetchManga(0);
+		}
+	}, [searchInput, fetchManga]);
 
 	useEffect(() => {
 		setMangaObj([]);
@@ -126,8 +180,8 @@ export const Browse = ({ selectedExtension }) => {
 	return (
 		<div id={styles.browseMain}>
 			<div id={styles.searchContainer}>
-				<input type='text' id={styles.searchInput} />
-				<button id={styles.search}>
+				<input type='text' id={styles.searchInput} onChange={(e) => setSearchInput(e.target.value)} />
+				<button id={styles.search} onClick={handleSearch}>
 					<CiSearch style={{ width: '1.5rem', height: '1.5rem' }} />
 				</button>
 			</div>
