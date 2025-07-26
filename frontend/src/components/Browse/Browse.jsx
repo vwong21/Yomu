@@ -4,6 +4,7 @@ import AutoSizer from 'react-virtualized-auto-sizer';
 import '../../Normalize.css';
 import styles from './Browse.module.css';
 import { MangaCardBrowse } from '../common/MangaCardBrowse/MangaCardBrowse';
+import { CiSearch } from 'react-icons/ci';
 
 const COLUMN_COUNT = 4;
 const VERTICAL_GAP_REM = 1; // 16px / 16
@@ -123,58 +124,71 @@ export const Browse = ({ selectedExtension }) => {
 	};
 
 	return (
-		<div
-			id={styles.browseContainer}
-			style={{
-				height: '100vh',
-				width: '100%',
-				overflow: 'hidden',
-				boxSizing: 'border-box',
-			}}>
-			<AutoSizer>
-				{({ height, width }) => {
-					const paddingPx = PADDING_REM * REM_TO_PX;
-					const totalHorizontalPadding = 2 * paddingPx;
-					const availableWidth = width - totalHorizontalPadding;
-					const columnWidth = availableWidth / COLUMN_COUNT;
+		<div id={styles.browseMain}>
+			<div id={styles.searchContainer}>
+				<input type='text' id={styles.searchInput} />
+				<button id={styles.search}>
+					<CiSearch style={{ width: '1.5rem', height: '1.5rem' }} />
+				</button>
+			</div>
+			<div
+				id={styles.browseContainer}
+				style={{
+					height: '100vh',
+					width: '100%',
+					overflow: 'hidden',
+					boxSizing: 'border-box',
+				}}>
+				<AutoSizer>
+					{({ height, width }) => {
+						const paddingPx = PADDING_REM * REM_TO_PX;
+						const totalHorizontalPadding = 2 * paddingPx;
+						const availableWidth = width - totalHorizontalPadding;
+						const columnWidth = availableWidth / COLUMN_COUNT;
 
-					// Maintain 3:5 aspect ratio (width:height) + vertical gap
-					const cardHeight = columnWidth * (5 / 3);
-					const rowHeight = cardHeight + VERTICAL_GAP_REM * REM_TO_PX;
+						// Maintain 3:5 aspect ratio (width:height) + vertical gap
+						const cardHeight = columnWidth * (5 / 3);
+						const rowHeight =
+							cardHeight + VERTICAL_GAP_REM * REM_TO_PX;
 
-					return (
-						<div
-							style={{
-								padding: `${PADDING_REM}rem`,
-								boxSizing: 'border-box',
-								height,
-								width,
-							}}>
-							<Grid
-								columnCount={COLUMN_COUNT}
-								columnWidth={columnWidth}
-								height={height}
-								rowCount={rowCount}
-								rowHeight={rowHeight}
-								width={availableWidth}
-								overscanRowCount={3}
-								onItemsRendered={handleItemsRendered}
-								outerRef={(ref) => {
-									if (ref)
-										ref.classList.add(styles.noScrollbar);
+						return (
+							<div
+								style={{
+									padding: `${
+										PADDING_REM / 2
+									}rem ${PADDING_REM}rem ${PADDING_REM}rem ${PADDING_REM}rem`,
+									boxSizing: 'border-box',
+									height,
+									width,
 								}}>
-								{Cell}
-							</Grid>
-						</div>
-					);
-				}}
-			</AutoSizer>
+								<Grid
+									columnCount={COLUMN_COUNT}
+									columnWidth={columnWidth}
+									height={height}
+									rowCount={rowCount}
+									rowHeight={rowHeight}
+									width={availableWidth}
+									overscanRowCount={3}
+									onItemsRendered={handleItemsRendered}
+									outerRef={(ref) => {
+										if (ref)
+											ref.classList.add(
+												styles.noScrollbar
+											);
+									}}>
+									{Cell}
+								</Grid>
+							</div>
+						);
+					}}
+				</AutoSizer>
 
-			{loadingRef.current && mangaObj.length === 0 && (
-				<div className={styles.spinnerCentered}>
-					<div className={styles.spinner}></div>
-				</div>
-			)}
+				{loadingRef.current && mangaObj.length === 0 && (
+					<div className={styles.spinnerCentered}>
+						<div className={styles.spinner}></div>
+					</div>
+				)}
+			</div>
 		</div>
 	);
 };
