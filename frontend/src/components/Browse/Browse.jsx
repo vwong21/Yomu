@@ -6,63 +6,67 @@ import styles from './Browse.module.css';
 import { MangaCardBrowse } from '../common/MangaCardBrowse/MangaCardBrowse';
 import { CiSearch } from 'react-icons/ci';
 
+// Layout and pagination constants
 const COLUMN_COUNT = 4;
-const VERTICAL_GAP_REM = 1; // 16px / 16
-const PADDING_REM = 2;
-const FETCH_BATCH_SIZE = 40;
-const REM_TO_PX = 16;
+const VERTICAL_GAP_REM = 1; // Vertical space between rows (in rem)
+const PADDING_REM = 2; // Padding around the grid (in rem)
+const FETCH_BATCH_SIZE = 40; // Number of manga to fetch per request
+const REM_TO_PX = 16; // 1rem = 16px
 
 export const Browse = ({ selectedExtension }) => {
-	const [searchInput, setSearchInput] = useState('')
+	// State for user input and fetched manga
+	const [searchInput, setSearchInput] = useState('');
 	const [mangaObj, setMangaObj] = useState([]);
 	const [offset, setOffset] = useState(0);
-	const [hasMore, setHasMore] = useState(true);
+	const [hasMore, setHasMore] = useState(true); // Controls infinite scroll
 
+	// Refs to track state across renders
 	const loadingRef = useRef(false);
 	const hasMoreRef = useRef(true);
 
-const handleSearch = async () => {
-	if (!selectedExtension || !searchInput.trim()) {
-		console.log('Search aborted: missing extension or empty input');
-		return;
-	}
+	// Handles the search functionality when search button is clicked
+	const handleSearch = async () => {
+		if (!selectedExtension || !searchInput.trim()) {
+			console.log('Search aborted: missing extension or empty input');
+			return;
+		}
 
-	console.log(`Searching for "${searchInput.trim()}" using ${selectedExtension}`);
-	loadingRef.current = true;
+		console.log(`Searching for "${searchInput.trim()}" using ${selectedExtension}`);
+		loadingRef.current = true;
 
-	try {
-		const res = await window.api.searchManga(
-			selectedExtension,
-			searchInput.trim()
-		);
+		try {
+			const res = await window.api.searchManga(
+				selectedExtension,
+				searchInput.trim()
+			);
 
-		console.log('Raw search response:', res);
+			console.log('Raw search response:', res);
 
-		if (Array.isArray(res) && res.length > 0) {
-			console.log(`Search successful. Found ${res.length} results.`);
-			setMangaObj(res);
-			setOffset(res.length);
-			setHasMore(false); // disable infinite scroll after search
-			hasMoreRef.current = false;
-		} else {
-			console.log('Search returned no results.');
+			if (Array.isArray(res) && res.length > 0) {
+				console.log(`Search successful. Found ${res.length} results.`);
+				setMangaObj(res);
+				setOffset(res.length);
+				setHasMore(false); // Disable infinite scroll for search results
+				hasMoreRef.current = false;
+			} else {
+				console.log('Search returned no results.');
+				setMangaObj([]);
+				setHasMore(false);
+				hasMoreRef.current = false;
+			}
+		} catch (error) {
+			console.error('Search failed:', error);
 			setMangaObj([]);
 			setHasMore(false);
 			hasMoreRef.current = false;
+		} finally {
+			loadingRef.current = false;
+			console.log(mangaObj);
+			console.log('Search completed.');
 		}
-	} catch (error) {
-		console.error('Search failed:', error);
-		setMangaObj([]);
-		setHasMore(false);
-		hasMoreRef.current = false;
-	} finally {
-		loadingRef.current = false;
-		console.log(mangaObj)
-		console.log('Search completed.');
-	}
-};
+	};
 
-
+	// Fetches a batch of manga when user scrolls near the bottom
 	const fetchManga = useCallback(
 		async (currentOffset) => {
 			if (loadingRef.current || !selectedExtension || !hasMoreRef.current)
@@ -102,8 +106,9 @@ const handleSearch = async () => {
 		[selectedExtension]
 	);
 
+	// Effect: Refetch default browse manga when input is cleared
 	useEffect(() => {
-	if (searchInput.trim() === '') {
+		if (searchInput.trim() === '') {
 			setMangaObj([]);
 			setOffset(0);
 			setHasMore(true);
@@ -113,6 +118,7 @@ const handleSearch = async () => {
 		}
 	}, [searchInput, fetchManga]);
 
+	// Effect: Reset and fetch when the extension changes
 	useEffect(() => {
 		setMangaObj([]);
 		setOffset(0);
@@ -122,6 +128,7 @@ const handleSearch = async () => {
 		fetchManga(0);
 	}, [selectedExtension, fetchManga]);
 
+	// Trigger more fetching when user scrolls near the end
 	const handleItemsRendered = useCallback(
 		({ visibleRowStopIndex, overscanRowStopIndex }) => {
 			const totalRows = Math.ceil(mangaObj.length / COLUMN_COUNT);
@@ -141,9 +148,11 @@ const handleSearch = async () => {
 		[mangaObj.length, offset, fetchManga]
 	);
 
+	// Total number of rows for the grid (add 1 if still loading)
 	const rowCount =
 		Math.ceil(mangaObj.length / COLUMN_COUNT) + (hasMore ? 1 : 0);
 
+	// Renders a single cell in the grid
 	const Cell = ({ columnIndex, rowIndex, style }) => {
 		const index = rowIndex * COLUMN_COUNT + columnIndex;
 		if (index >= mangaObj.length) return null;
@@ -177,14 +186,18 @@ const handleSearch = async () => {
 		);
 	};
 
+	// Main render
 	return (
 		<div id={styles.browseMain}>
+			{/* Search Bar */}
 			<div id={styles.searchContainer}>
 				<input type='text' id={styles.searchInput} onChange={(e) => setSearchInput(e.target.value)} />
 				<button id={styles.search} onClick={handleSearch}>
 					<CiSearch style={{ width: '1.5rem', height: '1.5rem' }} />
 				</button>
 			</div>
+
+			{/* Manga Grid */}
 			<div
 				id={styles.browseContainer}
 				style={{
@@ -237,6 +250,7 @@ const handleSearch = async () => {
 					}}
 				</AutoSizer>
 
+				{/* Spinner for initial loading */}
 				{loadingRef.current && mangaObj.length === 0 && (
 					<div className={styles.spinnerCentered}>
 						<div className={styles.spinner}></div>
