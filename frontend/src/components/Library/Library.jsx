@@ -26,7 +26,7 @@ export const Library = () => {
 		// Includes title and MangaCard components
 		<section id={styles.libraryComponent}>
 			<header id={styles.title}>
-				<h1>Yomu</h1>
+				<h1 id={styles.appTitle}>Yomu</h1>
 			</header>
 
 			{/* sets a loading screen so manga loads after ipc call */}

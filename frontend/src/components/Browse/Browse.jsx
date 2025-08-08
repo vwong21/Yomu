@@ -5,6 +5,7 @@ import '../../Normalize.css';
 import styles from './Browse.module.css';
 import { MangaCardBrowse } from '../common/MangaCardBrowse/MangaCardBrowse';
 import { CiSearch } from 'react-icons/ci';
+import { Link } from 'react-router-dom';
 
 // Layout and pagination constants
 const COLUMN_COUNT = 4;
@@ -31,7 +32,9 @@ export const Browse = ({ selectedExtension }) => {
 			return;
 		}
 
-		console.log(`Searching for "${searchInput.trim()}" using ${selectedExtension}`);
+		console.log(
+			`Searching for "${searchInput.trim()}" using ${selectedExtension}`
+		);
 		loadingRef.current = true;
 
 		try {
@@ -175,12 +178,14 @@ export const Browse = ({ selectedExtension }) => {
 						justifyContent: 'center',
 						alignItems: 'center',
 					}}>
-					<MangaCardBrowse
-						id={manga.id}
-						title={manga.title}
-						coverArt={manga.coverArt}
-						className={styles.mangaCardBrowse}
-					/>
+					<Link to={`/details/${manga.id}`}>
+						<MangaCardBrowse
+							id={manga.id}
+							title={manga.title}
+							coverArt={manga.coverArt}
+							className={styles.mangaCardBrowse}
+						/>
+					</Link>
 				</div>
 			</div>
 		);
@@ -191,7 +196,11 @@ export const Browse = ({ selectedExtension }) => {
 		<div id={styles.browseMain}>
 			{/* Search Bar */}
 			<div id={styles.searchContainer}>
-				<input type='text' id={styles.searchInput} onChange={(e) => setSearchInput(e.target.value)} />
+				<input
+					type='text'
+					id={styles.searchInput}
+					onChange={(e) => setSearchInput(e.target.value)}
+				/>
 				<button id={styles.search} onClick={handleSearch}>
 					<CiSearch style={{ width: '1.5rem', height: '1.5rem' }} />
 				</button>

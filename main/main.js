@@ -31,7 +31,11 @@ const updateModules = async () => {
 		for (const dirent of folders) {
 			if (dirent.isDirectory()) {
 				const extensionName = dirent.name;
-				const modulePath = join(extensionsDir, extensionName, `${extensionName.toLowerCase()}.js`);
+				const modulePath = join(
+					extensionsDir,
+					extensionName,
+					`${extensionName.toLowerCase()}.js`
+				);
 				const moduleURL = pathToFileURL(modulePath).href;
 
 				console.log(`Attempting to load extension: ${extensionName}`);
@@ -48,7 +52,9 @@ const updateModules = async () => {
 					}
 					console.log(`✅ Loaded extension: ${extensionName}`);
 				} catch (err) {
-					console.warn(`⚠️ Extension ${extensionName} could not be loaded. Skipping...`);
+					console.warn(
+						`⚠️ Extension ${extensionName} could not be loaded. Skipping...`
+					);
 					console.error(err.message);
 				}
 			}
@@ -126,7 +132,8 @@ const mangaDetails = [
 	{
 		name: 'Dragon Ball',
 		author: 'Akira Toriyama',
-		description: 'Dragon Ball is a Japanese media franchise created by Akira Toriyama in 1984',
+		description:
+			'Dragon Ball is a Japanese media franchise created by Akira Toriyama in 1984',
 		image: 'https://mangadex.org/covers/40bc649f-7b49-4645-859e-6cd94136e722/51c0756f-a053-46d0-a405-246a78541df2.jpg.512.jpg',
 	},
 	{
@@ -144,8 +151,8 @@ const searchManga = async (event, source, target) => {
 		if (!searchFunction) {
 			throw new Error(`Invalid source: ${source}`);
 		}
-		const result = await searchFunction(target)
-		return result
+		const result = await searchFunction(target);
+		return result;
 	} catch (error) {
 		console.error(error);
 		return error;
