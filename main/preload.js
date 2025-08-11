@@ -7,6 +7,8 @@ contextBridge.exposeInMainWorld('api', {
 		ipcRenderer.invoke('search-manga', source, target),
 	browseManga: (source, offset) =>
 		ipcRenderer.invoke('browse-manga', source, offset),
+	getDetails: (source, id) =>
+		ipcRenderer.invoke('get-details', source, id),
 	retrieveExtensions: () => ipcRenderer.invoke('retrieve-extensions'),
 	downloadExtension: (extensionName) =>
 		ipcRenderer.invoke('download-extension', extensionName),

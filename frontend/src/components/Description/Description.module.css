@@ -1,0 +1,35 @@
+#descriptionContainer {
+    background-color: #212121;
+    height: 100%;
+}
+
+#description {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 3rem;
+}
+
+#headerInfo {
+    height: 40%;
+    display: flex;
+    flex-direction: row;
+}
+
+#coverImageContainer {
+    width: 30%;
+}
+
+#coverImageContainer img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+#mangaDetailsContainer{
+    flex: 1;
+}
+
+#chapters {
+    flex: 1;
+}

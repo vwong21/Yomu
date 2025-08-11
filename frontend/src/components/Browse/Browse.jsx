@@ -178,7 +178,7 @@ export const Browse = ({ selectedExtension }) => {
 						justifyContent: 'center',
 						alignItems: 'center',
 					}}>
-					<Link to={`/details/${manga.id}`}>
+					<Link to={`/details/${manga.id}`} state={{selectedExtension}}>
 						<MangaCardBrowse
 							id={manga.id}
 							title={manga.title}

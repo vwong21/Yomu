@@ -21,6 +21,7 @@ let mainWindow;
 // Extension function registries
 const browseFunctions = {};
 const searchFunctions = {};
+const getDetailsFunctions = {};
 
 // Dynamically import all extensions
 const extensionsDir = join(__dirname, '../backend/extensions');
@@ -49,6 +50,9 @@ const updateModules = async () => {
 					}
 					if (module.searchManga) {
 						searchFunctions[extensionName] = module.searchManga;
+					}
+					if (module.getDetails) {
+						getDetailsFunctions[extensionName] = module.getDetails
 					}
 					console.log(`✅ Loaded extension: ${extensionName}`);
 				} catch (err) {
@@ -174,6 +178,20 @@ const browseManga = async (event, source, offset) => {
 	}
 };
 
+const getDetails = async (event, source, id) => {
+	try {
+		const getDetailsFunction = getDetailsFunctions[source];
+		if (!getDetailsFunction) {
+			throw new Error(`Invalid id: ${id}`)
+		}
+		const result = await getDetailsFunction(id);
+		return result
+	} catch (error) {
+		console.error(error);
+		return error;
+	}
+}
+
 // Dummy manga details (optional, for testing or fallback)
 const getMangaDetails = async () => {
 	return new Promise((resolve) => {
@@ -190,7 +208,9 @@ ipcMain.handle('browse-manga', async (event, source, offset) => {
 	return await browseManga(event, source, offset);
 });
 
-ipcMain.handle('get-manga-details', getMangaDetails);
+ipcMain.handle('get-details', async (event, source, id) => {
+	return await getDetails(event, source, id)
+});
 
 ipcMain.handle('retrieve-extensions', async () => {
 	try {
