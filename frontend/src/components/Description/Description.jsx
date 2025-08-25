@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import styles from './Description.module.css';
 import { useLocation, useParams } from 'react-router-dom';
+import { FaPlay } from 'react-icons/fa';
 
 export const Description = () => {
 	const { id } = useParams();
@@ -34,16 +35,26 @@ export const Description = () => {
 	return (
 		<div id={styles.descriptionContainer}>
 			<div id={styles.description}>
-				<section id={styles.headerInfo} class={styles.descriptionChildren}>
+				<section
+					id={styles.headerInfo}
+					class={styles.descriptionChildren}>
 					<div id={styles.coverImageContainer}>
-						<img src={cover} alt="" />
+						<img src={cover} alt='' />
 					</div>
 					<div id={styles.mangaDetailsContainer}>
-						<h1>{title}</h1>
-						<p>{description}</p>
+						<h1 id={styles.mangaTitle}>{title}</h1>
+						<p id={styles.mangaDescription}>{description}</p>
 					</div>
 				</section>
-				<section id={styles.chapters} class={styles.descriptionChildren}></section>
+				<section
+					id={styles.chapters}
+					class={styles.descriptionChildren}>
+					<div id={styles.buttonContainer}>
+						<div id={styles.readButton}>
+							Read Now <FaPlay />
+						</div>
+					</div>
+				</section>
 			</div>
 		</div>
 	);
