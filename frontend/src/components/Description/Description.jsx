@@ -44,17 +44,16 @@ export const Description = () => {
 					<div id={styles.mangaDetailsContainer}>
 						<h1 id={styles.mangaTitle}>{title}</h1>
 						<p id={styles.mangaDescription}>{description}</p>
+						<div id={styles.buttonContainer}>
+							<div id={styles.readButton}>
+								<FaPlay />
+							</div>
+						</div>
 					</div>
 				</section>
 				<section
 					id={styles.chapters}
-					class={styles.descriptionChildren}>
-					<div id={styles.buttonContainer}>
-						<div id={styles.readButton}>
-							Read Now <FaPlay />
-						</div>
-					</div>
-				</section>
+					class={styles.descriptionChildren}></section>
 			</div>
 		</div>
 	);
