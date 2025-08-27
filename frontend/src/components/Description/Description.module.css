@@ -8,6 +8,7 @@
 	flex-direction: column;
 	height: 100%;
 	padding: 3rem;
+	gap: 1rem;
 }
 
 #headerInfo {
@@ -24,6 +25,7 @@
 	width: 100%;
 	height: 100%;
 	object-fit: contain;
+	border-radius: 1rem;
 }
 
 #mangaDetailsContainer {
@@ -62,6 +64,22 @@
 	gap: 0.5rem;
 }
 
-#chapters {
-	flex: 1;
+#chaptersTable {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.tableRows {
+	width: 100%;
+	border-bottom: 1px solid rgba(256, 256, 256, 50%);
+}
+
+.tableHeaders {
+	width: 33.3%;
+	padding: 0.5rem;
+}
+
+.tableCells {
+	text-align: center;
+	padding-top: 1rem;
 }

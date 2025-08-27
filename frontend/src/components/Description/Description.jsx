@@ -11,7 +11,7 @@ export const Description = () => {
 	const [title, setTitle] = useState(null);
 	const [description, setDescription] = useState(null);
 	const [cover, setCover] = useState(null);
-	const [chapters, setChapters] = useState(null);
+	const [chapters, setChapters] = useState([]);
 
 	useEffect(() => {
 		if (!selectedExtension || !id) return;
@@ -23,7 +23,19 @@ export const Description = () => {
 				setTitle(res.title || null);
 				setDescription(res.description || null);
 				setCover(res.coverArt || null);
-				setChapters(res.chapters || null);
+				const seen = new Set();
+				const uniqueChapters = [];
+
+				for (const chapter of res.chapters || []) {
+					const chapterNo = chapter.attributes.chapter;
+					if (!seen.has(chapterNo)) {
+						seen.add(chapterNo);
+						uniqueChapters.push(chapter);
+					}
+				}
+
+				setChapters(uniqueChapters || null);
+				console.log(res.chapters);
 			} catch (error) {
 				console.error('Failed to fetch details:', error);
 			}
@@ -37,7 +49,7 @@ export const Description = () => {
 			<div id={styles.description}>
 				<section
 					id={styles.headerInfo}
-					class={styles.descriptionChildren}>
+					className={styles.descriptionChildren}>
 					<div id={styles.coverImageContainer}>
 						<img src={cover} alt='' />
 					</div>
@@ -53,7 +65,32 @@ export const Description = () => {
 				</section>
 				<section
 					id={styles.chapters}
-					class={styles.descriptionChildren}></section>
+					className={styles.descriptionChildren}>
+					<table id={styles.chaptersTable}>
+						<thead>
+							<tr className={styles.tableRows}>
+								<th className={styles.tableHeaders}>No.</th>
+								<th className={styles.tableHeaders}>Title</th>
+								<th className={styles.tableHeaders}>Volume</th>
+							</tr>
+						</thead>
+						<tbody>
+							{chapters.map((chapter) => (
+								<tr>
+									<td className={styles.tableCells}>
+										{chapter.attributes.chapter}
+									</td>
+									<td className={styles.tableCells}>
+										{chapter.attributes.title}
+									</td>
+									<td className={styles.tableCells}>
+										{chapter.attributes.volume}
+									</td>
+								</tr>
+							))}
+						</tbody>
+					</table>
+				</section>
 			</div>
 		</div>
 	);
