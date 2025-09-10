@@ -45,8 +45,10 @@ export const Description = () => {
 	}, [selectedExtension, id]);
 
 	return (
+		
 		<div id={styles.descriptionContainer}>
-			<div id={styles.description}>
+			{id && (
+				<div id={styles.description}>
 				<section
 					id={styles.headerInfo}
 					className={styles.descriptionChildren}>
@@ -92,6 +94,8 @@ export const Description = () => {
 					</table>
 				</section>
 			</div>
+			)}
+			
 		</div>
 	);
 };
